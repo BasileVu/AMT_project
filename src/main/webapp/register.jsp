@@ -25,7 +25,7 @@
     </nav>
 
     <div id="container" class="container">
-        <h1>Login</h1>
+        <h1>Register</h1>
         <form method="POST">
             <div class="form-group">
                 <label for="username">Username</label>
@@ -36,12 +36,13 @@
                 <input type="password" class="form-control" id="password" placeholder="Password">
             </div>
 
+            <div class="form-group">
+                <label for="password-confirmation">Confirm password</label>
+                <input type="password" class="form-control" id="password-confirmation" placeholder="Confirm password">
+            </div>
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
-        <div id="register">
-            <a href="${pageContext.request.contextPath}/register">No account yet ? Register.</a>
-        </div>
-    </div><
+    </div>
 </body>
 </html>
