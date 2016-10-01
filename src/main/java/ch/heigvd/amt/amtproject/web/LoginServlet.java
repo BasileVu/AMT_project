@@ -27,8 +27,5 @@ public class LoginServlet extends HttpServlet {
         String password = ""; // TODO
 
         // check password
-
-
-
     }
 }

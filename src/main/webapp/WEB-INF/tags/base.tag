@@ -1,6 +1,5 @@
-<%@tag description="Overall Page template" pageEncoding="UTF-8"%>
+<%@tag description="Overall page template" pageEncoding="UTF-8"%>
 <%@attribute name="head" fragment="true" %>
-<%@attribute name="header" fragment="true" %>
 <%@attribute name="container" fragment="true" %>
 
 <!DOCTYPE html>
@@ -11,7 +10,6 @@
     <title>AMT project</title>
 
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/css/base.css" rel="stylesheet">
 
     <jsp:invoke fragment="head"/>
 </head>
@@ -31,12 +29,6 @@
         </div>
     </nav>
 
-    <header id="top" class="header">
-        <jsp:invoke fragment="header"/>
-    </header>
-
-    <div id="container" class="container">
-        <jsp:invoke fragment="container"/>
-    </div>
+    <jsp:invoke fragment="container"/>
 </body>
 </html>

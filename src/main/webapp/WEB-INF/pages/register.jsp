@@ -1,8 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:base>
-    <jsp:attribute name="container">
+<t:container>
+    <jsp:attribute name="inner">
         <h1>Register</h1>
         <form method="post">
             <div class="form-group">
@@ -22,4 +22,4 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </jsp:attribute>
-</t:base>
+</t:container>

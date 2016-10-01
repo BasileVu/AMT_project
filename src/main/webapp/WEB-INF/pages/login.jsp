@@ -5,8 +5,9 @@
     <jsp:attribute name="head">
         <link href="${pageContext.request.contextPath}/css/login.css" rel="stylesheet">
     </jsp:attribute>
-
-    <jsp:attribute name="container">
+</t:base>
+<t:container>
+    <jsp:attribute name="inner">
         <h1>Login</h1>
         <form method="post">
             <div class="form-group">
@@ -25,4 +26,4 @@
             <a href="${pageContext.request.contextPath}/register">No account yet ? Register.</a>
         </div>
     </jsp:attribute>
-</t:base>
+</t:container>
