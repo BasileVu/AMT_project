@@ -13,10 +13,12 @@ import java.util.HashMap;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
-    HashMap<String, User> connectedUsers;
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+        if (request.getSession().getAttribute("username") != null) {
+            request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,8 +43,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        // connect user and redirect
-
-        System.out.println("connected"); // FIXME remove
+        request.getSession().setAttribute("username", username);
+        request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
     }
 }

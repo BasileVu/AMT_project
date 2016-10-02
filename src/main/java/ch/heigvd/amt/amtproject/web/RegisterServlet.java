@@ -15,7 +15,11 @@ import java.util.StringTokenizer;
 public class RegisterServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(request, response);
+        if (request.getSession().getAttribute("username") != null) {
+            request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(request, response);
+        }
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,6 +49,7 @@ public class RegisterServlet extends HttpServlet {
         connectedUsers.put(username, new User(username, password));
         getServletContext().setAttribute("connectedUsers", connectedUsers);
 
-        // redirect to welcome page
+        request.getSession().setAttribute("username", username);
+        request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
     }
 }

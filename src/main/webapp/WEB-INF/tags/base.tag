@@ -2,6 +2,8 @@
 <%@attribute name="head" fragment="true" %>
 <%@attribute name="container" fragment="true" %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,7 +25,14 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
+                    <c:choose>
+                        <c:when test="${not empty sessionScope.username}">
+                            <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
+                        </c:when>
+                        <c:otherwise>
+                            <li><a href="${pageContext.request.contextPath}/login">Login</a></li>
+                        </c:otherwise>
+                    </c:choose>
                 </ul>
             </div>
         </div>
