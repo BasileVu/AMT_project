@@ -21,11 +21,28 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println(request.getParameter("username"));
+        System.out.println(request.getParameter("password"));
         System.out.println("test");
 
-        String username = ""; // TODO
-        String password = ""; // TODO
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
-        // check password
+        Object o = getServletContext().getAttribute("connectedUsers");
+
+        if (username == null || password == null || o == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect username/password combination.");
+            return;
+        }
+
+        HashMap<String, User> connectedUsers = (HashMap<String, User>) o;
+
+        if (!connectedUsers.containsKey(username) || !connectedUsers.get(username).getPassword().equals(password)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect username/password combination.");
+            return;
+        }
+
+        // connect user and redirect
+
+        System.out.println("connected"); // FIXME remove
     }
 }

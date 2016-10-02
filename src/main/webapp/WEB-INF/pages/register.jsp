@@ -7,16 +7,17 @@
         <form method="post">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Username">
+                <input id="username" class="form-control" type="text" placeholder="Username" name="username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
+                <input id="password" class="form-control" type="password" placeholder="Password" name="password">
             </div>
 
             <div class="form-group">
                 <label for="password-confirmation">Confirm password</label>
-                <input type="password" class="form-control" id="password-confirmation" placeholder="Confirm password">
+                <input id="password-confirmation" class="form-control" type="password"
+                       placeholder="Confirm password" name="password-confirmation">
             </div>
 
             <button type="submit" class="btn btn-primary">Submit</button>

@@ -9,11 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.StringTokenizer;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
-
-    HashMap<String, User> connectedUsers;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(request, response);
@@ -21,16 +20,31 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println(request.getParameter("username"));
+        System.out.println(request.getParameter("password"));
+        System.out.println(request.getParameter("password-confirmation"));
         System.out.println("test");
 
-        String username = ""; // TODO
-        String password = ""; // TODO
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String passwordConfirmation = request.getParameter("password-confirmation");
 
 
-        // first check if username is valid -> error else
+        Object o = getServletContext().getAttribute("connectedUsers");
+        HashMap<String, User> connectedUsers = o != null ? (HashMap<String, User>) o : new HashMap<String, User>();
 
-        // then check if user already created -> error
+        if (connectedUsers.containsKey(username)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User already exists.");
+            return;
+        }
 
-        // else if everything ok, just register the user
+        if (!password.equals(passwordConfirmation)) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Passwords don't match.");
+            return;
+        }
+
+        connectedUsers.put(username, new User(username, password));
+        getServletContext().setAttribute("connectedUsers", connectedUsers);
+
+        // redirect to welcome page
     }
 }
