@@ -1,7 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.util.ErrorHandler;
+import ch.heigvd.amt.amtproject.util.Session;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,12 +13,16 @@ import java.util.HashMap;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
+    private final Session session = new Session();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+        session.setup(request, response);
+        session.forward("login.jsp");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        session.setup(request, response);
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -26,12 +30,11 @@ public class LoginServlet extends HttpServlet {
 
         if (username == null || password == null || connectedUsers == null ||
                 !connectedUsers.containsKey(username) || !connectedUsers.get(username).getPassword().equals(password)) {
-            ErrorHandler.setError(request, response, HttpServletResponse.SC_UNAUTHORIZED,
-                    "Incorrect username/password combination.", "WEB-INF/pages/login.jsp");
+            session.setError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect username/password combination.", "login.jsp");
             return;
         }
 
-        request.getSession().setAttribute("username", username);
-        request.getRequestDispatcher("WEB-INF/pages/account.jsp").forward(request, response);
+        session.connectUser(username);
+        session.forward("account.jsp");
     }
 }

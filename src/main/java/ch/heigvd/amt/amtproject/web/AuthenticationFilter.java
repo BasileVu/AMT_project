@@ -10,7 +10,6 @@ import java.io.IOException;
 
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
-
     private final Session session = new Session();
 
     public void init(FilterConfig config) throws ServletException {
