@@ -1,8 +1,9 @@
 package ch.heigvd.amt.amtproject.web;
 
+import ch.heigvd.amt.amtproject.util.Session;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,26 +11,25 @@ import java.io.IOException;
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
 
+    private final Session session = new Session();
+
     public void init(FilterConfig config) throws ServletException {
 
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        HttpServletRequest request = (HttpServletRequest)req;
-        HttpServletResponse response = (HttpServletResponse)resp;
+        session.setup((HttpServletRequest)req, (HttpServletResponse)resp);
+        String path = session.getCurrentPath();
 
-        String path = request.getRequestURI().substring(request.getContextPath().length());
-
-        // static files
-        if (path.startsWith("/static")) {
-            chain.doFilter(req, resp);
-            return;
+        if (session.userConnected() && (path.equals("/login") || path.equals("/register"))) {
+            session.forward("account.jsp");
         }
 
-        // if any pages other than /logout, redirect to user page
-        if (request.getSession().getAttribute("username") != null && !path.equals("/logout")) {
-            request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
-        } else {
+        else if (!session.userConnected() && path.equals("/account")) {
+            session.forward("login.jsp");
+        }
+
+        else {
             chain.doFilter(req, resp);
         }
     }
