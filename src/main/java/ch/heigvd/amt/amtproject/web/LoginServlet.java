@@ -32,15 +32,18 @@ public class LoginServlet extends HttpServlet {
         Object o = getServletContext().getAttribute("connectedUsers");
 
         if (username == null || password == null || o == null) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect username/password combination.");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            request.setAttribute("error", "Incorrect username/password combination.");
+            request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
             return;
         }
 
         HashMap<String, User> connectedUsers = (HashMap<String, User>) o;
 
         if (!connectedUsers.containsKey(username) || !connectedUsers.get(username).getPassword().equals(password)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect username/password combination.");
-            return;
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            request.setAttribute("error", "Incorrect username/password combination.");
+            request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
         }
 
         request.getSession().setAttribute("username", username);

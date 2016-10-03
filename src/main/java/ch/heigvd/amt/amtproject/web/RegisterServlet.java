@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.StringTokenizer;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
@@ -23,11 +22,6 @@ public class RegisterServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(request.getParameter("username"));
-        System.out.println(request.getParameter("password"));
-        System.out.println(request.getParameter("password-confirmation"));
-        System.out.println("test");
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String passwordConfirmation = request.getParameter("password-confirmation");

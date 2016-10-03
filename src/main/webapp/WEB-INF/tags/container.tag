@@ -4,10 +4,6 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:base>
-    <jsp:attribute name="head">
-        <link href="${pageContext.request.contextPath}/css/container.css" rel="stylesheet">
-    </jsp:attribute>
-
     <jsp:attribute name="container">
         <div id="container" class="container">
             <jsp:invoke fragment="inner"/>

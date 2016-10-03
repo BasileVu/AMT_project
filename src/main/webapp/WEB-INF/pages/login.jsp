@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <t:base>
     <jsp:attribute name="head">
@@ -27,3 +28,10 @@
         </div>
     </jsp:attribute>
 </t:container>
+<c:if test="${not empty error}">
+    <t:error>
+        <jsp:attribute name="inner">
+            ${error}
+        </jsp:attribute>
+    </t:error>
+</c:if>

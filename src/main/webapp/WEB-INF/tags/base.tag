@@ -1,8 +1,9 @@
 <%@tag description="Overall page template" pageEncoding="UTF-8"%>
 <%@attribute name="head" fragment="true" %>
 <%@attribute name="container" fragment="true" %>
+<%@attribute name="error" fragment="true" %>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,6 +13,8 @@
     <title>AMT project</title>
 
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/container.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/error.css" rel="stylesheet">
 
     <jsp:invoke fragment="head"/>
 </head>
@@ -39,5 +42,6 @@
     </nav>
 
     <jsp:invoke fragment="container"/>
+    <jsp:invoke fragment="error"/>
 </body>
 </html>
