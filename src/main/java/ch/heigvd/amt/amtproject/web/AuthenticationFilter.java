@@ -20,6 +20,13 @@ public class AuthenticationFilter implements Filter {
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
+        // static files
+        if (path.startsWith("/static")) {
+            chain.doFilter(req, resp);
+            return;
+        }
+
+        // if any pages other than /logout, redirect to user page
         if (request.getSession().getAttribute("username") != null && !path.equals("/logout")) {
             request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
         } else {

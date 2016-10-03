@@ -3,7 +3,7 @@
 
 <t:base>
     <jsp:attribute name="head">
-        <link href="${pageContext.request.contextPath}/css/index.css" rel="stylesheet">
+        <link href="${pageContext.request.contextPath}/static/css/index.css" rel="stylesheet">
     </jsp:attribute>
 
     <jsp:attribute name="container">

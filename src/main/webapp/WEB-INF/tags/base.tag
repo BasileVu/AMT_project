@@ -11,9 +11,9 @@
     <meta charset="utf-8">
     <title>AMT project</title>
 
-    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/css/container.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/css/error.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/container.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/error.css" rel="stylesheet">
 
     <jsp:invoke fragment="head"/>
 </head>
