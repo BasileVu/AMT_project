@@ -2,12 +2,10 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<t:base>
+<t:container>
     <jsp:attribute name="head">
         <link href="${pageContext.request.contextPath}/static/css/login.css" rel="stylesheet">
     </jsp:attribute>
-</t:base>
-<t:container>
     <jsp:attribute name="inner">
         <h1>Login</h1>
         <form method="post">
