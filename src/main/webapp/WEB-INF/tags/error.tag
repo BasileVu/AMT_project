@@ -3,6 +3,6 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<div id="error" class="container">
+<div id="error">
     <jsp:invoke fragment="inner"/>
 </div>

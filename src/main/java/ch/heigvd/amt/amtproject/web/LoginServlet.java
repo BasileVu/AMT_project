@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
+import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,28 +23,16 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(request.getParameter("username"));
-        System.out.println(request.getParameter("password"));
-        System.out.println("test");
-
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        Object o = getServletContext().getAttribute("connectedUsers");
+        HashMap<String, User> connectedUsers = (HashMap<String, User>)getServletContext().getAttribute("connectedUsers");
 
-        if (username == null || password == null || o == null) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            request.setAttribute("error", "Incorrect username/password combination.");
-            request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
+        if (username == null || password == null || connectedUsers == null ||
+                !connectedUsers.containsKey(username) || !connectedUsers.get(username).getPassword().equals(password)) {
+            ErrorHandler.setError(request, response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Incorrect username/password combination.", "WEB-INF/pages/login.jsp");
             return;
-        }
-
-        HashMap<String, User> connectedUsers = (HashMap<String, User>) o;
-
-        if (!connectedUsers.containsKey(username) || !connectedUsers.get(username).getPassword().equals(password)) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            request.setAttribute("error", "Incorrect username/password combination.");
-            request.getRequestDispatcher("WEB-INF/pages/login.jsp").forward(request, response);
         }
 
         request.getSession().setAttribute("username", username);

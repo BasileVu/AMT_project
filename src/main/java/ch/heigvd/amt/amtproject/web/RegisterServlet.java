@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
+import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,12 +32,14 @@ public class RegisterServlet extends HttpServlet {
         HashMap<String, User> connectedUsers = o != null ? (HashMap<String, User>) o : new HashMap<String, User>();
 
         if (connectedUsers.containsKey(username)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User already exists.");
+            ErrorHandler.setError(request, response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "User already exists.", "WEB-INF/pages/register.jsp");
             return;
         }
 
         if (!password.equals(passwordConfirmation)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Passwords don't match.");
+            ErrorHandler.setError(request, response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "Passwords don't match.", "WEB-INF/pages/register.jsp");
             return;
         }
 

@@ -20,6 +20,14 @@
                 <input id="password" class="form-control" type="password" placeholder="Password" name="password">
             </div>
 
+            <c:if test="${not empty error}">
+                <t:error>
+                    <jsp:attribute name="inner">
+                        ${error}
+                    </jsp:attribute>
+                </t:error>
+            </c:if>
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
 
@@ -28,10 +36,3 @@
         </div>
     </jsp:attribute>
 </t:container>
-<c:if test="${not empty error}">
-    <t:error>
-        <jsp:attribute name="inner">
-            ${error}
-        </jsp:attribute>
-    </t:error>
-</c:if>

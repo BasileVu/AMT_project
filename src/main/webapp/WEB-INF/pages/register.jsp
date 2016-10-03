@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <t:container>
     <jsp:attribute name="inner">
@@ -19,6 +20,14 @@
                 <input id="password-confirmation" class="form-control" type="password"
                        placeholder="Confirm password" name="password-confirmation">
             </div>
+
+            <c:if test="${not empty error}">
+                <t:error>
+                    <jsp:attribute name="inner">
+                        ${error}
+                    </jsp:attribute>
+                </t:error>
+            </c:if>
 
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
