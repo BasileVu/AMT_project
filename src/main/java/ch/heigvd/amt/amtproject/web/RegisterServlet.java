@@ -15,11 +15,7 @@ import java.util.HashMap;
 public class RegisterServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getSession().getAttribute("username") != null) {
-            request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("WEB-INF/pages/register.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,6 +23,11 @@ public class RegisterServlet extends HttpServlet {
         String password = request.getParameter("password");
         String passwordConfirmation = request.getParameter("password-confirmation");
 
+        if (username.equals("") || password.equals("") || passwordConfirmation.equals("")) {
+            ErrorHandler.setError(request, response, HttpServletResponse.SC_UNAUTHORIZED,
+                    "All the fields must be filled.", "WEB-INF/pages/register.jsp");
+            return;
+        }
 
         Object o = getServletContext().getAttribute("connectedUsers");
         HashMap<String, User> connectedUsers = o != null ? (HashMap<String, User>) o : new HashMap<String, User>();

@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ErrorHandler {
-    public static void setError(HttpServletRequest request, HttpServletResponse response, int errorCode,
+    public static void setError(HttpServletRequest req, HttpServletResponse resp, int status,
                                 String error, String dispatcherPage) throws ServletException, IOException {
-        response.setStatus(errorCode);
-        request.setAttribute("error", error);
-        request.getRequestDispatcher(dispatcherPage).forward(request, response);
+        resp.setStatus(status);
+        req.setAttribute("error", error);
+        req.getRequestDispatcher(dispatcherPage).forward(req, resp);
     }
 }

@@ -10,10 +10,6 @@ import java.io.IOException;
 @WebServlet(name = "IndexServlet", urlPatterns = {""})
 public class IndexServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getSession().getAttribute("username") != null) {
-            request.getRequestDispatcher("WEB-INF/pages/connected.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
-        }
+        request.getRequestDispatcher("WEB-INF/pages/index.jsp").forward(request, response);
     }
 }
