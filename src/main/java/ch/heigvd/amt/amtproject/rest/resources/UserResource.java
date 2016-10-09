@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
 import ch.heigvd.amt.amtproject.services.UserManager;
+import ch.heigvd.amt.amtproject.services.UserManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -13,7 +14,7 @@ import javax.ws.rs.Path;
 @Path("/users")
 public class UserResource {
     @EJB
-    UserManager userManager;
+    UserManagerLocal userManager;
 
     @GET
     @Path("/{username}/info")

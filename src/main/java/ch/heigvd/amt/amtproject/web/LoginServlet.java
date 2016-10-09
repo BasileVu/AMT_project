@@ -1,11 +1,10 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.exceptions.InvalidCredentialsException;
-import ch.heigvd.amt.amtproject.services.UserManager;
 import ch.heigvd.amt.amtproject.services.UserManagerLocal;
 import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
 import javax.ejb.EJB;
+import javax.security.auth.login.CredentialException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,8 +26,8 @@ public class LoginServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            userManager.connectUser(response, request.getParameter("username"), request.getParameter("password"));
-        } catch (InvalidCredentialsException e) {
+            userManager.connectUser(request, request.getParameter("username"), request.getParameter("password"));
+        } catch (CredentialException e) {
             ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), "login.jsp");
         }
         request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);

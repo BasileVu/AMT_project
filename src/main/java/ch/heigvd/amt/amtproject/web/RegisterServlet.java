@@ -35,7 +35,6 @@ public class RegisterServlet extends HttpServlet {
             ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), "register.jsp");
         }
 
-        UserManager.connectCurrentUser(request);
-        request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
+        request.getRequestDispatcher(JSP_FOLDER + "index.jsp").forward(request, response);
     }
 }
