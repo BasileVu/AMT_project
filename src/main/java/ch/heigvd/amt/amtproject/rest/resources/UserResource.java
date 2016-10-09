@@ -1,6 +1,5 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
-import ch.heigvd.amt.amtproject.services.UserManager;
 import ch.heigvd.amt.amtproject.services.UserManagerLocal;
 
 import javax.ejb.EJB;

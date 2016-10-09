@@ -35,11 +35,7 @@ public class UserManager implements UserManagerLocal {
         return u;
     }
 
-    public void connectUser(HttpServletRequest request, String username, String password) throws CredentialException {
-        if (username == null || password == null ||
-                !storage.containsUser(username) || !storage.getUser(username).getPassword().equals(password)) {
-            throw new CredentialException("Incorrect username/password combination.");
-        }
+    public void connectCurrentUser(HttpServletRequest request, String username) {
         request.getSession().setAttribute(USERNAME_KEY, username);
     }
 

@@ -1,10 +1,11 @@
 package ch.heigvd.amt.amtproject.web;
 
+import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.services.UserManagerLocal;
+import ch.heigvd.amt.amtproject.util.Authentication;
 import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
 import javax.ejb.EJB;
-import javax.security.auth.login.CredentialException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +26,20 @@ public class LoginServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            userManager.connectUser(request, request.getParameter("username"), request.getParameter("password"));
-        } catch (CredentialException e) {
-            ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), "login.jsp");
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        boolean error = username == null || password == null;
+        User u = userManager.get(username);
+        error = error || u == null;
+
+        if (error || !Authentication.passwordValid(password, u.getPassword())) {
+            ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid username/password combination.", "login.jsp");
+            return;
         }
+
+        userManager.connectCurrentUser(request, username);
         request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
     }
 }
