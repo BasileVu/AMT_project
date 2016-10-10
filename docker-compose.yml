@@ -5,4 +5,4 @@ services:
     ports:
      - "9090:8080"
      - "9990:9990"
-    container_name: amtlab01_wildfly
+    container_name: amt_project_wildfly
