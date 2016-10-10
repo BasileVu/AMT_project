@@ -1,4 +1,4 @@
-# AMT-LAB01
+# AMT_project
 This is a simple docker - java EE application for our AMT course in HEIG-VD.
 
 ## Deploying the app
