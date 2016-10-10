@@ -34,7 +34,7 @@ public class LoginServlet extends HttpServlet {
         User u = userManager.get(username);
         error = error || u == null;
 
-        if (error || !Authentication.passwordValid(password, u.getPassword())) {
+        if (error || !Authentication.passwordValid(password, u)) {
             ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid username/password combination.", "login.jsp");
             return;
         }

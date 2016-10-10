@@ -5,8 +5,8 @@ import ch.heigvd.amt.amtproject.model.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.security.auth.login.CredentialException;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Stateless
 public class UserManager implements UserManagerLocal {
@@ -45,5 +45,9 @@ public class UserManager implements UserManagerLocal {
 
     public static boolean isCurrentUserConnected(HttpServletRequest request) {
         return request.getSession().getAttribute(USERNAME_KEY) != null;
+    }
+
+    public List<User> getAllUsers() {
+        return storage.getAllUsers();
     }
 }

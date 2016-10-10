@@ -1,11 +1,10 @@
 package ch.heigvd.amt.amtproject.util;
 
+import ch.heigvd.amt.amtproject.model.User;
+
 public class Authentication {
-    public static boolean passwordValid(String inputPassword, String storedPassword) {
-        if (inputPassword == null || storedPassword == null) {
-            return false;
-        }
+    public static boolean passwordValid(String inputPassword, User user) {
         // FIXME
-        return inputPassword.equals(storedPassword);
+        return inputPassword != null && user != null && inputPassword.equals(user.getPassword());
     }
 }
