@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/usr/bin/env sh
 
 set -e
 
@@ -6,5 +6,5 @@ set -e
 mvn compile war:war
 
 # deploy
-cp target/lab01-1.0-SNAPSHOT.war images/wildfly/
+cp target/AMT_project.war images/wildfly/
 docker-compose up --build
