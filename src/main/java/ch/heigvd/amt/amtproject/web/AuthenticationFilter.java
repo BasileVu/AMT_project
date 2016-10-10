@@ -1,15 +1,14 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.services.UserManager;
-import ch.heigvd.amt.amtproject.services.UserManagerLocal;
-import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
-import javax.ejb.EJB;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
@@ -26,11 +25,11 @@ public class AuthenticationFilter implements Filter {
         boolean connected = UserManager.isCurrentUserConnected(request);
 
         if (connected && (path.equals("/login") || path.equals("/register"))) {
-            request.getRequestDispatcher("account.jsp").forward(request, response);
+            request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
         }
 
         else if (!connected && path.equals("/account")) {
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            request.getRequestDispatcher(JSP_FOLDER + "login.jsp").forward(request, response);
         }
 
         else {
