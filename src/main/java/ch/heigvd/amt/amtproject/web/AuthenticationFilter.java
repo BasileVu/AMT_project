@@ -1,6 +1,6 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.services.UserManager;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -8,24 +8,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
+
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
-    private final Session session = new Session();
 
     public void init(FilterConfig config) throws ServletException {
 
     }
 
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        session.setup((HttpServletRequest)req, (HttpServletResponse)resp);
-        String path = session.getCurrentPath();
+        HttpServletRequest request = (HttpServletRequest)req;
+        HttpServletResponse response = (HttpServletResponse)resp;
+        String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        if (session.userConnected() && (path.equals("/login") || path.equals("/register"))) {
-            session.forward("account.jsp");
+        boolean connected = UserManager.isCurrentUserConnected(request);
+
+        if (connected && (path.equals("/login") || path.equals("/register"))) {
+            request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
         }
 
-        else if (!session.userConnected() && path.equals("/account")) {
-            session.forward("login.jsp");
+        else if (!connected && path.equals("/account")) {
+            request.getRequestDispatcher(JSP_FOLDER + "login.jsp").forward(request, response);
         }
 
         else {

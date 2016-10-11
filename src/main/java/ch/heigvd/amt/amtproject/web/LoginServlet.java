@@ -1,40 +1,45 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.services.UserManagerLocal;
+import ch.heigvd.amt.amtproject.util.Authentication;
+import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
+
+import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
-    private final Session session = new Session();
+
+    @EJB
+    UserManagerLocal userManager;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        session.setup(request, response);
-        session.forward("login.jsp");
+        request.getRequestDispatcher(JSP_FOLDER + "login.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        session.setup(request, response);
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        HashMap<String, User> connectedUsers = (HashMap<String, User>)getServletContext().getAttribute("connectedUsers");
+        boolean error = username == null || password == null;
+        User u = userManager.get(username);
+        error = error || u == null;
 
-        if (username == null || password == null || connectedUsers == null ||
-                !connectedUsers.containsKey(username) || !connectedUsers.get(username).getPassword().equals(password)) {
-            session.setError(HttpServletResponse.SC_UNAUTHORIZED, "Incorrect username/password combination.", "login.jsp");
+        if (error || !Authentication.passwordValid(password, u)) {
+            ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, "Invalid username/password combination.", "login.jsp");
             return;
         }
 
-        session.connectUser(username);
-        session.forward("account.jsp");
+        userManager.connectCurrentUser(request, username);
+        request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
     }
 }

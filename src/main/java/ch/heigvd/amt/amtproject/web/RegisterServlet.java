@@ -1,54 +1,41 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.exceptions.CreationFailedException;
+import ch.heigvd.amt.amtproject.services.UserManager;
+import ch.heigvd.amt.amtproject.services.UserManagerLocal;
+import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
+
+import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
-    private final Session session = new Session();
+    @EJB
+    UserManagerLocal userManager;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        session.setup(request, response);
-        session.forward("register.jsp");
+        request.getRequestDispatcher(JSP_FOLDER + "register.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        session.setup(request, response);
-
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-        String passwordConfirmation = request.getParameter("password-confirmation");
-
-        if (username.equals("") || password.equals("") || passwordConfirmation.equals("")) {
-            session.setError(HttpServletResponse.SC_UNAUTHORIZED, "All the fields must be filled.", "register.jsp");
-            return;
+        try {
+            String username = request.getParameter("username");
+            userManager.createUser(
+                    username,
+                    request.getParameter("password"),
+                    request.getParameter("password-confirmation")
+            );
+            userManager.connectCurrentUser(request, username);
+            response.sendRedirect(request.getContextPath() + "/account");
+        } catch (CreationFailedException e) {
+            ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), "register.jsp");
         }
-
-        Object o = getServletContext().getAttribute("connectedUsers");
-        HashMap<String, User> connectedUsers = o != null ? (HashMap<String, User>) o : new HashMap<String, User>();
-
-        if (connectedUsers.containsKey(username)) {
-            session.setError(HttpServletResponse.SC_UNAUTHORIZED, "User already exists.", "register.jsp");
-            return;
-        }
-
-        if (!password.equals(passwordConfirmation)) {
-            session.setError(HttpServletResponse.SC_UNAUTHORIZED, "Passwords don't match.", "register.jsp");
-            return;
-        }
-
-        connectedUsers.put(username, new User(username, password));
-        getServletContext().setAttribute("connectedUsers", connectedUsers);
-
-        session.connectUser(username);
-        session.forward("account.jsp");
     }
 }
