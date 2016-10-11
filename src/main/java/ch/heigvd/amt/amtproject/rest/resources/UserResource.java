@@ -21,7 +21,7 @@ public class UserResource {
     UserManagerLocal userManager;
 
     @GET
-    @Path("/{username}/info")
+    @Path("/{username}")
     @Produces("application/json")
     public Response getUserInfo(@PathParam(value="username") String username) {
         User u = userManager.get(username);

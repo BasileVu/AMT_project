@@ -26,15 +26,16 @@ public class RegisterServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            String username = request.getParameter("username");
             userManager.createUser(
-                    request.getParameter("username"),
+                    username,
                     request.getParameter("password"),
                     request.getParameter("password-confirmation")
             );
+            userManager.connectCurrentUser(request, username);
+            response.sendRedirect(request.getContextPath() + "/account");
         } catch (CreationFailedException e) {
             ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), "register.jsp");
         }
-
-        request.getRequestDispatcher(JSP_FOLDER + "index.jsp").forward(request, response);
     }
 }
