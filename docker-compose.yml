@@ -6,6 +6,8 @@ services:
      - "9090:8080"
      - "9990:9990"
     container_name: amt_project_wildfly
+    links:
+     - mysql:db
   mysql:
     build: ./images/mysql
     environment:
