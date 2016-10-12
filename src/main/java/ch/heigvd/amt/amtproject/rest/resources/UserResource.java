@@ -1,15 +1,15 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
+import ch.heigvd.amt.amtproject.exceptions.CreationFailedException;
 import ch.heigvd.amt.amtproject.model.User;
+import ch.heigvd.amt.amtproject.rest.dto.RegisterUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
 import ch.heigvd.amt.amtproject.services.UserManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class UserResource {
 
     @GET
     @Path("/{username}")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getUserInfo(@PathParam(value="username") String username) {
         User u = userManager.get(username);
         if (u == null) {
@@ -33,11 +33,18 @@ public class UserResource {
 
     @GET
     @Path("/")
-    @Produces("application/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<UserDTO> getUsers() {
-        System.out.println("test");
         List<UserDTO> res = new ArrayList<>();
         userManager.getAllUsers().forEach(a -> res.add(new UserDTO(a.getUsername())));
         return res;
+    }
+
+    @POST
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createUser(RegisterUserDTO user) {
+        userManager.createUser(user.getUsername(), user.getPassword());
+        return Response.status(Response.Status.CREATED).build();
     }
 }

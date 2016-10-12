@@ -9,8 +9,9 @@ import java.util.List;
 
 @Local
 public interface UserManagerLocal {
-    User createUser(String username, String password, String parameter) throws CreationFailedException;
+    User createUser(String username, String password);
     User get(String username);
     void connectCurrentUser(HttpServletRequest request, String username);
     List<User> getAllUsers();
+    boolean userExists(String username);
 }

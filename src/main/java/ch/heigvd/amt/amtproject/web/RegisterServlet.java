@@ -25,17 +25,30 @@ public class RegisterServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String passwordConfirmation = request.getParameter("password-confirmation");
+
         try {
-            String username = request.getParameter("username");
-            userManager.createUser(
-                    username,
-                    request.getParameter("password"),
-                    request.getParameter("password-confirmation")
-            );
-            userManager.connectCurrentUser(request, username);
-            response.sendRedirect(request.getContextPath() + "/account");
+            if (username.equals("") || password.equals("") || passwordConfirmation.equals("")) {
+                throw new CreationFailedException("All the fields must be filled.");
+            }
+
+            if (userManager.userExists(username)) {
+                throw new CreationFailedException("User already exists.");
+            }
+
+            if (!password.equals(passwordConfirmation)) {
+                throw new CreationFailedException("Passwords don't match.");
+            }
+
         } catch (CreationFailedException e) {
             ErrorHandler.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, e.getMessage(), "register.jsp");
+            return;
         }
+
+        userManager.createUser(username, password);
+        userManager.connectCurrentUser(request, username);
+        response.sendRedirect(request.getContextPath() + "/account");
     }
 }
