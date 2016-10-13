@@ -1,5 +1,6 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
+import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.exceptions.CreationFailedException;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.RegisterUserDTO;

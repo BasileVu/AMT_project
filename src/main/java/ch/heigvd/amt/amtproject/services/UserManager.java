@@ -1,6 +1,6 @@
 package ch.heigvd.amt.amtproject.services;
 
-import ch.heigvd.amt.amtproject.exceptions.CreationFailedException;
+import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
 
 import javax.ejb.EJB;
@@ -14,7 +14,7 @@ public class UserManager implements UserManagerLocal {
     public static final String USERNAME_KEY = "username";
 
     @EJB
-    RAMDataStorageLocal storage;
+    UserDAO userDAO;
 
     public static boolean isCurrentUserConnected(HttpServletRequest request) {
         return request.getSession().getAttribute(USERNAME_KEY) != null;
@@ -23,8 +23,7 @@ public class UserManager implements UserManagerLocal {
     @Override
     public User createUser(String username, String password) {
         User u = new User(username, password);
-        storage.putUser(u);
-
+        userDAO.create(u);
         return u;
     }
 
@@ -35,16 +34,16 @@ public class UserManager implements UserManagerLocal {
 
     @Override
     public User get(String username) {
-        return storage.getUser(username);
+        return userDAO.get(username);
     }
 
     @Override
     public List<User> getAllUsers() {
-        return storage.getAllUsers();
+        return userDAO.getAll();
     }
 
     @Override
     public boolean userExists(String username) {
-        return storage.containsUser(username);
+        return userDAO.get(username) != null;
     }
 }
