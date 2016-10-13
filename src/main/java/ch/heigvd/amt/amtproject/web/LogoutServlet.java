@@ -1,5 +1,8 @@
 package ch.heigvd.amt.amtproject.web;
 
+import ch.heigvd.amt.amtproject.services.SessionLocal;
+
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,10 +14,13 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
+    @EJB
+    SessionLocal session;
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if (request.getSession().getAttribute("username") != null) {
-            request.getSession().removeAttribute("username");
+        if (session.isCurrentUserConnected(request)) {
+            session.disconnectCurrentUser(request);
         }
-        request.getRequestDispatcher(JSP_FOLDER + "index.jsp").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }

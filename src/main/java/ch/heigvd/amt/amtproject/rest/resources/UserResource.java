@@ -1,11 +1,9 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
 import ch.heigvd.amt.amtproject.dao.UserDAO;
-import ch.heigvd.amt.amtproject.exceptions.CreationFailedException;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.RegisterUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
-import ch.heigvd.amt.amtproject.services.UserManagerLocal;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -19,13 +17,13 @@ import java.util.List;
 @Path("/users")
 public class UserResource {
     @EJB
-    UserManagerLocal userManager;
+    UserDAO userDAO;
 
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserInfo(@PathParam(value="username") String username) {
-        User u = userManager.get(username);
+    public Response getUser(@PathParam(value="username") String username) {
+        User u = userDAO.get(username);
         if (u == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -37,15 +35,24 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<UserDTO> getUsers() {
         List<UserDTO> res = new ArrayList<>();
-        userManager.getAllUsers().forEach(a -> res.add(new UserDTO(a.getUsername())));
+        userDAO.getAll().forEach(a -> res.add(new UserDTO(a.getUsername())));
         return res;
     }
 
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(RegisterUserDTO user) {
-        userManager.createUser(user.getUsername(), user.getPassword());
+    public Response create(RegisterUserDTO user) {
+        userDAO.create(new User(user.getUsername(), user.getPassword()));
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    @DELETE
+    @Path("/{username}")
+    public Response delete(@PathParam(value="username") String username) {
+        if (!userDAO.delete(username)) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }
