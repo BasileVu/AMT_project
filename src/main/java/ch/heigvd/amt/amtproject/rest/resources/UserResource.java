@@ -43,7 +43,9 @@ public class UserResource {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(RegisterUserDTO user) {
-        userDAO.create(new User(user.getUsername(), user.getPassword()));
+        if (!userDAO.create(new User(user.getUsername(), user.getPassword()))) {
+            return Response.status(Response.Status.CONFLICT).build();
+        }
         return Response.status(Response.Status.CREATED).build();
     }
 
