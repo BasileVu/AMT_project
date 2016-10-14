@@ -1,10 +1,12 @@
 package ch.heigvd.amt.amtproject.web;
 
+import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.services.UserManagerLocal;
+import ch.heigvd.amt.amtproject.services.SessionLocal;
 import ch.heigvd.amt.amtproject.util.Authentication;
 import ch.heigvd.amt.amtproject.util.ErrorHandler;
 
+import javax.activation.DataSource;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +21,10 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 public class LoginServlet extends HttpServlet {
 
     @EJB
-    UserManagerLocal userManager;
+    UserDAO userDAO;
+
+    @EJB
+    SessionLocal session;
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher(JSP_FOLDER + "login.jsp").forward(request, response);
@@ -31,7 +36,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         boolean error = username == null || password == null;
-        User u = userManager.get(username);
+        User u = userDAO.get(username);
         error = error || u == null;
 
         if (error || !Authentication.passwordValid(password, u)) {
@@ -39,7 +44,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        userManager.connectCurrentUser(request, username);
-        request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
+        session.connectCurrentUser(request, username);
+        response.sendRedirect(request.getContextPath() + "/account");
     }
 }
