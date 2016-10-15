@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.dao.UserDAO;
+import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.services.Session;
 import ch.heigvd.amt.amtproject.services.SessionLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
@@ -31,6 +32,22 @@ public class AccountServlet extends HttpServlet {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, "account.jsp");
         }
+        request.setAttribute("quote", quote);
+        request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String quote = request.getParameter("quote");
+        User u;
+        try {
+            u = userDAO.get(session.getCurrentUsername(request));
+            u.setQuote(quote);
+            userDAO.update(u);
+        } catch (RuntimeException e) {
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                    Errors.CLIENT_500, "account.jsp");
+        }
+
         request.setAttribute("quote", quote);
         request.getRequestDispatcher(JSP_FOLDER + "account.jsp").forward(request, response);
     }

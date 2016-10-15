@@ -15,7 +15,14 @@
                 </t:error>
             </c:when>
             <c:otherwise>
-                <p>"${requestScope.quote}"</p>
+                <form method="POST">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="5" name="quote">${requestScope.quote}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary pull-right" type="submit">Save</button>
+                    </div>
+                </form>
             </c:otherwise>
         </c:choose>
     </jsp:attribute>
