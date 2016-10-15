@@ -13,8 +13,13 @@ public class Session implements SessionLocal {
     public static final String USERNAME_KEY = "username";
 
     @Override
+    public String getCurrentUsername(HttpServletRequest request) {
+        return (String)request.getSession().getAttribute(USERNAME_KEY);
+    }
+
+    @Override
     public boolean isCurrentUserConnected(HttpServletRequest request) {
-        return request.getSession().getAttribute(USERNAME_KEY) != null;
+        return getCurrentUsername(request) != null;
     }
 
     @Override
