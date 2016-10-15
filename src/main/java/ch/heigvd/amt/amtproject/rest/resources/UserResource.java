@@ -2,7 +2,7 @@ package ch.heigvd.amt.amtproject.rest.resources;
 
 import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.rest.dto.RegisterUserDTO;
+import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
 
 import javax.ejb.EJB;
@@ -23,7 +23,7 @@ public class UserResource {
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser(@PathParam(value="username") String username) {
-        User u = null;
+        User u;
         try {
             u = userDAO.get(username);
             if (u == null) {
@@ -32,7 +32,7 @@ public class UserResource {
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return Response.ok(new UserDTO(u.getUsername())).build();
+        return Response.ok(new UserDTO(u.getUsername(), u.getQuote())).build();
     }
 
     @GET
@@ -41,7 +41,7 @@ public class UserResource {
     public Response getUsers() {
         List<UserDTO> res = new ArrayList<>();
         try {
-            userDAO.getAll().forEach(a -> res.add(new UserDTO(a.getUsername())));
+            userDAO.getAll().forEach(u -> res.add(new UserDTO(u.getUsername(), u.getQuote())));
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -51,13 +51,38 @@ public class UserResource {
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(RegisterUserDTO user) {
+    public Response create(PasswordUserDTO user) {
         try {
             userDAO.create(new User(user.getUsername(), user.getPassword()));
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
         return Response.status(Response.Status.CREATED).build();
+    }
+
+    @POST
+    @Path("/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@PathParam("username") String username, PasswordUserDTO user) {
+        try {
+            User u = userDAO.get(username);
+            if (u == null) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            }
+
+            if (user.getPassword() != null) {
+                u.setPassword(user.getPassword());
+            }
+
+            if (user.getQuote() != null) {
+                u.setPassword(user.getPassword());
+            }
+
+            userDAO.update(u);
+        } catch (RuntimeException e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @DELETE
