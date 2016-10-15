@@ -75,7 +75,7 @@ public class UserResource {
             }
 
             if (user.getQuote() != null) {
-                u.setPassword(user.getPassword());
+                u.setQuote(user.getQuote());
             }
 
             userDAO.update(u);
