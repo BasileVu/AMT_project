@@ -1,10 +1,10 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.services.SessionLocal;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Authentication;
 import ch.heigvd.amt.amtproject.util.Errors;
+import ch.heigvd.amt.amtproject.util.Session;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,9 +21,6 @@ public class LoginServlet extends HttpServlet {
 
     @EJB
     UserDAOLocal userDAO;
-
-    @EJB
-    SessionLocal session;
 
     public static final String USED_JSP = "login.jsp";
     public static final String LOGIN_ERROR = "Invalid username/password combination.";
@@ -54,7 +51,7 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        session.connectCurrentUser(request, username);
+        Session.connectCurrentUser(request, u.getUsername());
         response.sendRedirect(request.getContextPath() + "/account");
     }
 }

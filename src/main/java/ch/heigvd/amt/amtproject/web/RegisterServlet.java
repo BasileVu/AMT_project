@@ -1,10 +1,10 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.services.SessionLocal;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
+import ch.heigvd.amt.amtproject.util.Session;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,9 +21,6 @@ public class RegisterServlet extends HttpServlet {
 
     @EJB
     UserDAOLocal userDAO;
-
-    @EJB
-    SessionLocal session;
 
     public static final String USED_JSP = "register.jsp";
 
@@ -52,7 +49,7 @@ public class RegisterServlet extends HttpServlet {
                     Errors.CLIENT_500, USED_JSP);
             return;
         }
-        session.connectCurrentUser(request, username);
+        Session.connectCurrentUser(request, username);
         response.sendRedirect(request.getContextPath() + "/account");
     }
 

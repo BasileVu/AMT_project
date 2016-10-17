@@ -5,6 +5,7 @@ import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.FieldLength;
+import ch.heigvd.amt.amtproject.util.PATCH;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -82,7 +83,7 @@ public class UserResource {
         return Response.created(href).build();
     }
 
-    @POST
+    @PATCH
     @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("username") String username, PasswordUserDTO user) {

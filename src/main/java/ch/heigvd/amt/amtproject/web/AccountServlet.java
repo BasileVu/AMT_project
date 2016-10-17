@@ -1,7 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.services.SessionLocal;
+import ch.heigvd.amt.amtproject.util.Session;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
@@ -19,9 +19,6 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 @WebServlet(name = "AccountServlet", urlPatterns = {"/account"})
 public class AccountServlet extends HttpServlet {
     @EJB
-    SessionLocal session;
-
-    @EJB
     UserDAOLocal userDAO;
 
     public static final String USED_JSP = "account.jsp";
@@ -30,7 +27,7 @@ public class AccountServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quote = "";
         try {
-            quote = userDAO.get(session.getCurrentUsername(request)).getQuote();
+            quote = userDAO.get(Session.getCurrentUsername(request)).getQuote();
         } catch (RuntimeException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
@@ -53,7 +50,7 @@ public class AccountServlet extends HttpServlet {
 
         User u;
         try {
-            u = userDAO.get(session.getCurrentUsername(request));
+            u = userDAO.get(Session.getCurrentUsername(request));
             u.setQuote(quote);
             userDAO.update(u);
         } catch (RuntimeException e) {

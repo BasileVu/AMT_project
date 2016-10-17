@@ -1,8 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.services.SessionLocal;
+import ch.heigvd.amt.amtproject.util.Session;
 
-import javax.ejb.EJB;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +10,6 @@ import java.io.IOException;
 
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
-
-    @EJB
-    SessionLocal session;
 
     public void init(FilterConfig config) throws ServletException {
 
@@ -25,7 +21,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse)resp;
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        boolean connected = session.isCurrentUserConnected(request);
+        boolean connected = Session.isCurrentUserConnected(request);
 
         if (connected && (path.equals("/login") || path.equals("/register"))) {
             response.sendRedirect(request.getContextPath() + "/account");

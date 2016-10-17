@@ -39,7 +39,7 @@ public class UserDAO implements UserDAOLocal {
         String query =
                 "SELECT * " +
                 "FROM user " +
-                "WHERE BINARY username = ?";
+                "WHERE username = ?";
 
         User res = null;
         try (
@@ -91,7 +91,7 @@ public class UserDAO implements UserDAOLocal {
         String query =
                 "UPDATE user " +
                 "SET password = ?, quote = ? " +
-                "WHERE BINARY username = ?";
+                "WHERE username = ?";
 
         try (
                 Connection connection = source.getConnection();
@@ -110,7 +110,7 @@ public class UserDAO implements UserDAOLocal {
     public void delete(String username) throws RuntimeException {
         String query =
                 "DELETE FROM user " +
-                "WHERE BINARY username = ?";
+                "WHERE username = ?";
 
         try (
                 Connection connection = source.getConnection();
