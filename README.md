@@ -26,4 +26,4 @@ Still at the root of the directory, enter the following commands:
 
 ## REST API
 
-The various routes of our API are defined on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
+Our API is defined on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
