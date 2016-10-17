@@ -1,6 +1,5 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.services.Session;
 import ch.heigvd.amt.amtproject.services.SessionLocal;
 
 import javax.ejb.EJB;
@@ -9,8 +8,6 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
-import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {

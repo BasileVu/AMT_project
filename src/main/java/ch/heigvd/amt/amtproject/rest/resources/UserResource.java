@@ -1,16 +1,19 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
-import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
+import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +21,10 @@ import java.util.List;
 @Path("/users")
 public class UserResource {
     @EJB
-    UserDAO userDAO;
+    UserDAOLocal userDAO;
+
+    @Context
+    UriInfo uriInfo;
 
     @GET
     @Path("/{username}")
@@ -67,7 +73,13 @@ public class UserResource {
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return Response.status(Response.Status.CREATED).build();
+
+        URI href = uriInfo.getBaseUriBuilder()
+                .path(UserResource.class)
+                .path(UserResource.class, "getUser")
+                .build(username);
+
+        return Response.created(href).build();
     }
 
     @POST

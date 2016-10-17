@@ -1,8 +1,8 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.services.SessionLocal;
+import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 
@@ -20,7 +20,7 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 public class RegisterServlet extends HttpServlet {
 
     @EJB
-    UserDAO userDAO;
+    UserDAOLocal userDAO;
 
     @EJB
     SessionLocal session;

@@ -1,19 +1,21 @@
-package ch.heigvd.amt.amtproject.dao;
+package ch.heigvd.amt.amtproject.services;
 
 import ch.heigvd.amt.amtproject.model.User;
 
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Singleton
-public class UserDAO {
+@Stateless
+public class UserDAO implements UserDAOLocal {
     @Resource(lookup = "java:/jdbc/amtproject")
     DataSource source;
 
+    @Override
     public void create(User u) throws RuntimeException {
         String query =
                 "INSERT INTO user " +
@@ -32,11 +34,12 @@ public class UserDAO {
         }
     }
 
+    @Override
     public User get(String username) throws RuntimeException {
         String query =
                 "SELECT * " +
                 "FROM user " +
-                "WHERE username = ?";
+                "WHERE BINARY username = ?";
 
         User res = null;
         try (
@@ -58,6 +61,7 @@ public class UserDAO {
         return res;
     }
 
+    @Override
     public List<User> getAll() throws RuntimeException {
         String query =
                 "SELECT * " +
@@ -82,11 +86,12 @@ public class UserDAO {
         return res;
     }
 
+    @Override
     public void update(User u) throws RuntimeException {
         String query =
                 "UPDATE user " +
                 "SET password = ?, quote = ? " +
-                "WHERE username = ?";
+                "WHERE BINARY username = ?";
 
         try (
                 Connection connection = source.getConnection();
@@ -101,10 +106,11 @@ public class UserDAO {
         }
     }
 
+    @Override
     public void delete(String username) throws RuntimeException {
         String query =
                 "DELETE FROM user " +
-                "WHERE username = ?";
+                "WHERE BINARY username = ?";
 
         try (
                 Connection connection = source.getConnection();

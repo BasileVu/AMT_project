@@ -1,12 +1,7 @@
 package ch.heigvd.amt.amtproject.services;
 
-import ch.heigvd.amt.amtproject.dao.UserDAO;
-import ch.heigvd.amt.amtproject.model.User;
-
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Stateless
 public class Session implements SessionLocal {

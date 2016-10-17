@@ -1,6 +1,5 @@
 package ch.heigvd.amt.amtproject.services;
 
-
 import javax.ejb.Local;
 import javax.servlet.http.HttpServletRequest;
 

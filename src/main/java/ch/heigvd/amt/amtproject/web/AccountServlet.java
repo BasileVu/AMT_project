@@ -1,9 +1,8 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.services.Session;
 import ch.heigvd.amt.amtproject.services.SessionLocal;
+import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 
@@ -23,7 +22,7 @@ public class AccountServlet extends HttpServlet {
     SessionLocal session;
 
     @EJB
-    UserDAO userDAO;
+    UserDAOLocal userDAO;
 
     public static final String USED_JSP = "account.jsp";
     public static final String QUOTE_TOO_LONG = "Your quote is too long (max " + FieldLength.QUOTE_MAX_LENGTH + " chars)";
