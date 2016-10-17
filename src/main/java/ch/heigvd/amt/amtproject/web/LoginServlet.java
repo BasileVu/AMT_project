@@ -1,10 +1,10 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.services.SessionLocal;
+import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Authentication;
 import ch.heigvd.amt.amtproject.util.Errors;
+import ch.heigvd.amt.amtproject.util.Session;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -20,18 +20,14 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 public class LoginServlet extends HttpServlet {
 
     @EJB
-    UserDAO userDAO;
+    UserDAOLocal userDAO;
 
-    @EJB
-    SessionLocal session;
-
-    public static String usedJSP = "login.jsp";
-
-    public static String loginErrorMessage = "Invalid username/password combination.";
+    public static final String USED_JSP = "login.jsp";
+    public static final String LOGIN_ERROR = "Invalid username/password combination.";
 
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher(JSP_FOLDER + "login.jsp").forward(request, response);
+        request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -45,18 +41,17 @@ public class LoginServlet extends HttpServlet {
             u = userDAO.get(username);
         } catch (RuntimeException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    Errors.CLIENT_500, usedJSP);
+                    Errors.CLIENT_500, USED_JSP);
             return;
         }
         error = error || u == null;
 
         if (error || !Authentication.passwordValid(password, u)) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED,
-                    loginErrorMessage, usedJSP);
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, LOGIN_ERROR, USED_JSP);
             return;
         }
 
-        session.connectCurrentUser(request, username);
+        Session.connectCurrentUser(request, u.getUsername());
         response.sendRedirect(request.getContextPath() + "/account");
     }
 }

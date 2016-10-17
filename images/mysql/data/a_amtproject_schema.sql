@@ -1,5 +1,5 @@
 DROP SCHEMA IF EXISTS amtproject;
-CREATE SCHEMA amtproject;
+CREATE SCHEMA amtproject DEFAULT CHARACTER SET utf8;
 USE amtproject;
 
 CREATE TABLE user (

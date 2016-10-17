@@ -1,15 +1,20 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
-import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
+import ch.heigvd.amt.amtproject.services.UserDAOLocal;
+import ch.heigvd.amt.amtproject.util.FieldLength;
+import ch.heigvd.amt.amtproject.util.PATCH;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +22,10 @@ import java.util.List;
 @Path("/users")
 public class UserResource {
     @EJB
-    UserDAO userDAO;
+    UserDAOLocal userDAO;
+
+    @Context
+    UriInfo uriInfo;
 
     @GET
     @Path("/{username}")
@@ -52,15 +60,30 @@ public class UserResource {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(PasswordUserDTO user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        if (username == null || password == null ||
+                username.isEmpty() || password.isEmpty() ||
+                username.length() > FieldLength.USERNAME_MAX_LENGTH || password.length() > FieldLength.PASSWORD_MAX_LENGTH) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         try {
-            userDAO.create(new User(user.getUsername(), user.getPassword()));
+            userDAO.create(new User(username, password));
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return Response.status(Response.Status.CREATED).build();
+
+        URI href = uriInfo.getBaseUriBuilder()
+                .path(UserResource.class)
+                .path(UserResource.class, "getUser")
+                .build(username);
+
+        return Response.created(href).build();
     }
 
-    @POST
+    @PATCH
     @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("username") String username, PasswordUserDTO user) {
@@ -71,10 +94,18 @@ public class UserResource {
             }
 
             if (user.getPassword() != null) {
+                if (user.getPassword().length() > FieldLength.PASSWORD_MAX_LENGTH) {
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+
                 u.setPassword(user.getPassword());
             }
 
             if (user.getQuote() != null) {
+                if (user.getQuote().length() > FieldLength.QUOTE_MAX_LENGTH) {
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+
                 u.setQuote(user.getQuote());
             }
 
