@@ -4,6 +4,7 @@ import ch.heigvd.amt.amtproject.dao.UserDAO;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
+import ch.heigvd.amt.amtproject.util.FieldLength;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -52,8 +53,17 @@ public class UserResource {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(PasswordUserDTO user) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+
+        if (username == null || password == null ||
+                username.isEmpty() || password.isEmpty() ||
+                username.length() > FieldLength.USERNAME_MAX_LENGTH || password.length() > FieldLength.PASSWORD_MAX_LENGTH) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         try {
-            userDAO.create(new User(user.getUsername(), user.getPassword()));
+            userDAO.create(new User(username, password));
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -71,10 +81,18 @@ public class UserResource {
             }
 
             if (user.getPassword() != null) {
+                if (user.getPassword().length() > FieldLength.PASSWORD_MAX_LENGTH) {
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+
                 u.setPassword(user.getPassword());
             }
 
             if (user.getQuote() != null) {
+                if (user.getQuote().length() > FieldLength.QUOTE_MAX_LENGTH) {
+                    return Response.status(Response.Status.BAD_REQUEST).build();
+                }
+
                 u.setQuote(user.getQuote());
             }
 
