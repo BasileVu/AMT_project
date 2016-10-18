@@ -3,7 +3,9 @@ CREATE SCHEMA amtproject DEFAULT CHARACTER SET utf8;
 USE amtproject;
 
 CREATE TABLE user (
+    id INT NOT NULL AUTO_INCREMENT,
     username VARCHAR(45) UNIQUE NOT NULL,
     password VARCHAR(45) NOT NULL,
-    quote VARCHAR(255)
+    quote VARCHAR(255),
+    PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
