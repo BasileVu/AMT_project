@@ -17,7 +17,6 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
-
     @EJB
     UserDAOLocal userDAO;
 

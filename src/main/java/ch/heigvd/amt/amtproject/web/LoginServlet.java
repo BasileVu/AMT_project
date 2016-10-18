@@ -18,7 +18,6 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
-
     @EJB
     UserDAOLocal userDAO;
 
