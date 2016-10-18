@@ -22,11 +22,9 @@
             </div>
 
             <c:if test="${not empty error}">
-                <t:error>
-                    <jsp:attribute name="inner">
-                        ${error}
-                    </jsp:attribute>
-                </t:error>
+                <div class="alert alert-danger">
+                    ${error}
+                </div>
             </c:if>
 
             <button type="submit" class="btn btn-primary">Submit</button>

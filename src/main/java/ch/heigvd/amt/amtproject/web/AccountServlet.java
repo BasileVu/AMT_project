@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.web;
 
 import ch.heigvd.amt.amtproject.model.User;
+import ch.heigvd.amt.amtproject.util.Keys;
 import ch.heigvd.amt.amtproject.util.Session;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
@@ -22,7 +23,8 @@ public class AccountServlet extends HttpServlet {
     UserDAOLocal userDAO;
 
     public static final String USED_JSP = "account.jsp";
-    public static final String QUOTE_TOO_LONG = "Your quote is too long (max " + FieldLength.QUOTE_MAX_LENGTH + " chars)";
+    public static final String QUOTE_TOO_LONG_ERROR = "Your quote is too long (max " + FieldLength.QUOTE_MAX_LENGTH + " chars)";
+    public static final String ACCOUNT_UPDATED_INFO = "Your account has been successfully updated.";
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quote = "";
@@ -32,19 +34,19 @@ public class AccountServlet extends HttpServlet {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
         }
-        request.setAttribute("quote", quote);
+        request.setAttribute(Keys.QUOTE, quote);
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String quote = request.getParameter("quote");
+        String quote = request.getParameter(Keys.QUOTE);
 
         if (quote == null) {
             quote = "";
         }
 
         if (quote.length() > FieldLength.QUOTE_MAX_LENGTH) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST, QUOTE_TOO_LONG , USED_JSP);
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST, QUOTE_TOO_LONG_ERROR, USED_JSP);
             return;
         }
 
@@ -58,7 +60,8 @@ public class AccountServlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute("quote", quote);
+        request.setAttribute(Keys.QUOTE, quote);
+        request.setAttribute(Keys.INFO, ACCOUNT_UPDATED_INFO);
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 }
