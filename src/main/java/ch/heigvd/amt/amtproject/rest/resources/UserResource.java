@@ -70,6 +70,9 @@ public class UserResource {
         }
 
         try {
+            if (userDAO.get(username) != null) {
+                return Response.status(Response.Status.CONFLICT).build();
+            }
             userDAO.create(username, password);
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
