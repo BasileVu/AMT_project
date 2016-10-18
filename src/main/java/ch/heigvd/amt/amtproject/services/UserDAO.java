@@ -16,18 +16,19 @@ public class UserDAO implements UserDAOLocal {
     DataSource source;
 
     @Override
-    public void create(User u) throws RuntimeException {
+    public void create(String username, String password) throws RuntimeException {
         String query =
-                "INSERT INTO user " +
-                "VALUES(?, ?, ?)";
+                "INSERT INTO user (" +
+                    "username, " +
+                    "password" +
+                ") VALUES (?, ?)";
 
         try (
                 Connection connection = source.getConnection();
                 PreparedStatement stmt = connection.prepareStatement(query)
         ) {
-            stmt.setString(1, u.getUsername());
-            stmt.setString(2, u.getPassword());
-            stmt.setString(3, u.getQuote());
+            stmt.setString(1, username);
+            stmt.setString(2, password);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -49,9 +50,10 @@ public class UserDAO implements UserDAOLocal {
             stmt.setString(1, username);
             try(ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
+                    long id = rs.getLong("id");
                     String password = rs.getString("password");
                     String quote = rs.getString("quote");
-                    res = new User(username, password, quote);
+                    res = new User(id, username, password, quote);
                 }
             }
         } catch (SQLException e) {
@@ -74,10 +76,11 @@ public class UserDAO implements UserDAOLocal {
                 ResultSet rs = statement.executeQuery()
         ) {
             while (rs.next()) {
+                long id = rs.getLong("id");
                 String username = rs.getString("username");
                 String password = rs.getString("password");
                 String quote = rs.getString("quote");
-                res.add(new User(username, password, quote));
+                res.add(new User(id, username, password, quote));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

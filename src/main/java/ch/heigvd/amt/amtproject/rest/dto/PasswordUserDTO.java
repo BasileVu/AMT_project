@@ -7,13 +7,13 @@ public class PasswordUserDTO extends UserDTO {
         super();
     }
 
-    public PasswordUserDTO(String username, String password) {
-        super(username);
+    public PasswordUserDTO(long id, String username, String password) {
+        super(id, username);
         this.password = password;
     }
 
-    public PasswordUserDTO(String username, String password, String quote) {
-        super(username, quote);
+    public PasswordUserDTO(long id, String username, String password, String quote) {
+        super(id, username, quote);
         this.password = password;
     }
 

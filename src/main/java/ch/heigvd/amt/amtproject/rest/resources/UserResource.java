@@ -40,7 +40,7 @@ public class UserResource {
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
-        return Response.ok(new UserDTO(u.getUsername(), u.getQuote())).build();
+        return Response.ok(new UserDTO(u.getId(), u.getUsername(), u.getQuote())).build();
     }
 
     @GET
@@ -49,7 +49,7 @@ public class UserResource {
     public Response getUsers() {
         List<UserDTO> res = new ArrayList<>();
         try {
-            userDAO.getAll().forEach(u -> res.add(new UserDTO(u.getUsername(), u.getQuote())));
+            userDAO.getAll().forEach(u -> res.add(new UserDTO(u.getId(), u.getUsername(), u.getQuote())));
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }
@@ -70,7 +70,7 @@ public class UserResource {
         }
 
         try {
-            userDAO.create(new User(username, password));
+            userDAO.create(username, password);
         } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
         }

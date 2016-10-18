@@ -43,7 +43,7 @@ public class RegisterServlet extends HttpServlet {
         }
 
         try {
-            userDAO.create(new User(username, password));
+            userDAO.create(username, password);
         } catch (RuntimeException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);

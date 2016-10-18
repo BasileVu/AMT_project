@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.rest.dto;
 
 public class UserDTO {
+    private long id;
     private String username;
     private String quote;
 
@@ -8,13 +9,19 @@ public class UserDTO {
 
     }
 
-    public UserDTO(String username) {
+    public UserDTO(long id, String username) {
+        this.id = id;
         this.username = username;
     }
 
-    public UserDTO(String username, String quote) {
+    public UserDTO(long id, String username, String quote) {
+        this.id = id;
         this.username = username;
         this.quote = quote;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUsername() {

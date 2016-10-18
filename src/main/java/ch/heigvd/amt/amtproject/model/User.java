@@ -1,19 +1,26 @@
 package ch.heigvd.amt.amtproject.model;
 
 public class User {
+    private final long id;
     private final String username;
     private String password;
     private String quote = "";
 
-    public User(String username, String password) {
+    public User(long id, String username, String password) {
+        this.id = id;
         this.username = username;
         this.password = password;
     }
 
-    public User(String username, String password, String quote) {
+    public User(long id, String username, String password, String quote) {
+        this.id = id;
         this.username = username;
         this.password = password;
         setQuote(quote);
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUsername() {
