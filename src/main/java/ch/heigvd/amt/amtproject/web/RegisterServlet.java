@@ -1,6 +1,5 @@
 package ch.heigvd.amt.amtproject.web;
 
-import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
@@ -81,7 +80,7 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             if (userDAO.get(username) != null) {
-                Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED,
+                Errors.setErrorAndForward(request, response, HttpServletResponse.SC_CONFLICT,
                         USER_ALREADY_EXISTS, USED_JSP);
                 return false;
             }
