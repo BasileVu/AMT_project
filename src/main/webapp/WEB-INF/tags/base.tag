@@ -1,6 +1,7 @@
 <%@tag description="Overall page template" pageEncoding="UTF-8"%>
 <%@attribute name="head" fragment="true" %>
 <%@attribute name="container" fragment="true" %>
+<%@attribute name="scripts" fragment="true" %>
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -45,5 +46,7 @@
     </nav>
 
     <jsp:invoke fragment="container"/>
+
+    <jsp:invoke fragment="scripts"/>
 </body>
 </html>
