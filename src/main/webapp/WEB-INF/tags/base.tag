@@ -24,10 +24,15 @@
                 <a class="navbar-brand" href="${pageContext.request.contextPath}">AMT project</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-left">
+                    <c:if test="${not empty sessionScope.username}">
+                        <li><a href="${pageContext.request.contextPath}/account">Account</a></li>
+                        <li><a href="${pageContext.request.contextPath}/users">Users</a></li>
+                    </c:if>
+                </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <c:choose>
                         <c:when test="${not empty sessionScope.username}">
-                            <li><a href="${pageContext.request.contextPath}/account">Account</a></li>
                             <li><a href="${pageContext.request.contextPath}/logout">Logout</a></li>
                         </c:when>
                         <c:otherwise>

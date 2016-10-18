@@ -27,7 +27,7 @@ public class AuthenticationFilter implements Filter {
             response.sendRedirect(request.getContextPath() + "/account");
         }
 
-        else if (!connected && path.equals("/account")) {
+        else if (!connected && (path.equals("/account") || path.equals("/users"))) {
             response.sendRedirect(request.getContextPath() + "/login");
         }
 
