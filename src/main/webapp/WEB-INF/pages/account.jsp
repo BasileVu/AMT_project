@@ -8,17 +8,22 @@
         <h3>Your quote</h3>
         <c:choose>
             <c:when test="${not empty error}">
-                <t:error>
-                    <jsp:attribute name="inner">
-                        ${error}
-                    </jsp:attribute>
-                </t:error>
+                <div class="alert alert-danger">
+                    ${error}
+                </div>
             </c:when>
             <c:otherwise>
                 <form method="POST">
                     <div class="form-group">
                         <textarea class="form-control" rows="5" name="quote">${requestScope.quote}</textarea>
                     </div>
+
+                    <c:if test="${not empty info}">
+                        <div class="alert alert-info">
+                                ${info}
+                        </div>
+                    </c:if>
+                    
                     <div class="form-group">
                         <button class="btn btn-primary pull-right" type="submit">Save</button>
                     </div>
