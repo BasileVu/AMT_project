@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="ch.heigvd.amt.amtproject.util.FieldLength" %>
 
 <t:container>
     <jsp:attribute name="inner">
@@ -15,12 +16,13 @@
             <c:otherwise>
                 <form method="POST">
                     <div class="form-group">
-                        <textarea class="form-control" rows="5" name="quote">${requestScope.quote}</textarea>
+                        <textarea class="form-control" rows="5" name="quote" 
+                                  maxlength="${FieldLength.QUOTE_MAX_LENGTH}">${requestScope.quote}</textarea>
                     </div>
 
                     <c:if test="${not empty info}">
                         <div class="alert alert-info">
-                                ${info}
+                            ${info}
                         </div>
                     </c:if>
                     
