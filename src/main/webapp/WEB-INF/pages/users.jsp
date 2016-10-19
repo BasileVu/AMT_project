@@ -21,8 +21,8 @@
                             <table id="users" class="table table-bordered table-striped" style="background-color: white">
                                 <thead>
                                 <tr>
-                                    <th>Username</th>
                                     <th>Id</th>
+                                    <th>Username</th>
                                     <th>Quote</th>
                                 </tr>
                                 </thead>
@@ -30,8 +30,8 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th>Username</th>
                                     <th>Id</th>
+                                    <th>Username</th>
                                     <th>Quote</th>
                                 </tr>
                                 </tfoot>
