@@ -7,6 +7,7 @@ import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 import ch.heigvd.amt.amtproject.util.PATCH;
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
