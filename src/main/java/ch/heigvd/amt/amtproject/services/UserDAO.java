@@ -16,7 +16,7 @@ public class UserDAO implements UserDAOLocal {
     DataSource source;
 
     @Override
-    public void create(String username, String password) throws RuntimeException {
+    public void create(String username, String password) throws SQLException {
         String query =
                 "INSERT INTO user (" +
                     "username, " +
@@ -36,7 +36,7 @@ public class UserDAO implements UserDAOLocal {
     }
 
     @Override
-    public User get(String username) throws RuntimeException {
+    public User get(String username) throws SQLException {
         String query =
                 "SELECT * " +
                 "FROM user " +
@@ -64,7 +64,7 @@ public class UserDAO implements UserDAOLocal {
     }
 
     @Override
-    public List<User> getAll() throws RuntimeException {
+    public List<User> getAll() throws SQLException {
         String query =
                 "SELECT * " +
                 "FROM user";
@@ -90,7 +90,7 @@ public class UserDAO implements UserDAOLocal {
     }
 
     @Override
-    public void update(User u) throws RuntimeException {
+    public void update(User u) throws SQLException {
         String query =
                 "UPDATE user " +
                 "SET password = ?, quote = ? " +
@@ -110,7 +110,7 @@ public class UserDAO implements UserDAOLocal {
     }
 
     @Override
-    public void delete(String username) throws RuntimeException {
+    public void delete(String username) throws SQLException {
         String query =
                 "DELETE FROM user " +
                 "WHERE username = ?";

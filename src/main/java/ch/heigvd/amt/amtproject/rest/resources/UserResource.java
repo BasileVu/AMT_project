@@ -4,6 +4,7 @@ import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
+import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 import ch.heigvd.amt.amtproject.util.PATCH;
 
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +37,18 @@ public class UserResource {
         try {
             u = userDAO.get(username);
             if (u == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .build();
             }
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (SQLException e) {
+            return Response
+                    .serverError()
+                    .build();
         }
-        return Response.ok(new UserDTO(u.getId(), u.getUsername(), u.getQuote())).build();
+        return Response
+                .ok(new UserDTO(u.getId(), u.getUsername(), u.getQuote()))
+                .build();
     }
 
     @GET
@@ -49,11 +57,18 @@ public class UserResource {
     public Response getUsers() {
         List<UserDTO> res = new ArrayList<>();
         try {
-            userDAO.getAll().forEach(u -> res.add(new UserDTO(u.getId(), u.getUsername(), u.getQuote())));
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+            userDAO.getAll()
+                    .forEach(u -> res.add(
+                            new UserDTO(u.getId(), u.getUsername(), u.getQuote()))
+                    );
+        } catch (SQLException e) {
+            return Response
+                    .serverError()
+                    .build();
         }
-        return Response.ok(res).build();
+        return Response
+                .ok(res)
+                .build();
     }
 
     @POST
@@ -63,22 +78,49 @@ public class UserResource {
         String username = user.getUsername();
         String password = user.getPassword();
 
-        if (username == null || password == null ||
-                username.isEmpty() || password.isEmpty() ||
-                username.length() > FieldLength.USERNAME_MAX_LENGTH || password.length() > FieldLength.PASSWORD_MAX_LENGTH) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        if (username == null || username.isEmpty()) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(Errors.USERNAME_MISSING)
+                    .build();
+        }
+
+        if ( password == null || password.isEmpty()) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(Errors.PASSWORD_MISSING)
+                    .build();
+        }
+
+        if (username.length() > FieldLength.USERNAME_MAX_LENGTH ) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(Errors.USERNAME_TOO_LONG)
+                    .build();
+        }
+
+        if (password.length() > FieldLength.PASSWORD_MAX_LENGTH) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(Errors.PASSWORD_TOO_LONG)
+                    .build();
         }
 
         try {
             if (userDAO.get(username) != null) {
-                return Response.status(Response.Status.CONFLICT).build();
+                return Response
+                        .status(Response.Status.CONFLICT)
+                        .build();
             }
             userDAO.create(username, password);
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (SQLException e) {
+            return Response
+                    .serverError()
+                    .build();
         }
 
-        URI href = uriInfo.getBaseUriBuilder()
+        URI href = uriInfo
+                .getBaseUriBuilder()
                 .path(UserResource.class)
                 .path(UserResource.class, "getUser")
                 .build(username);
@@ -93,12 +135,17 @@ public class UserResource {
         try {
             User u = userDAO.get(username);
             if (u == null) {
-                return Response.status(Response.Status.NOT_FOUND).build();
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .build();
             }
 
             if (user.getPassword() != null) {
                 if (user.getPassword().length() > FieldLength.PASSWORD_MAX_LENGTH) {
-                    return Response.status(Response.Status.BAD_REQUEST).build();
+                    return Response
+                            .status(Response.Status.BAD_REQUEST)
+                            .entity(Errors.PASSWORD_TOO_LONG)
+                            .build();
                 }
 
                 u.setPassword(user.getPassword());
@@ -106,17 +153,24 @@ public class UserResource {
 
             if (user.getQuote() != null) {
                 if (user.getQuote().length() > FieldLength.QUOTE_MAX_LENGTH) {
-                    return Response.status(Response.Status.BAD_REQUEST).build();
+                    return Response
+                            .status(Response.Status.BAD_REQUEST)
+                            .entity(Errors.QUOTE_TOO_LONG)
+                            .build();
                 }
 
                 u.setQuote(user.getQuote());
             }
 
             userDAO.update(u);
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (SQLException e) {
+            return Response
+                    .serverError()
+                    .build();
         }
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response
+                .noContent()
+                .build();
     }
 
     @DELETE
@@ -124,9 +178,13 @@ public class UserResource {
     public Response delete(@PathParam(value="username") String username) {
         try {
             userDAO.delete(username);
-        } catch (RuntimeException e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        } catch (SQLException e) {
+            return Response
+                    .serverError()
+                    .build();
         }
-        return Response.status(Response.Status.NO_CONTENT).build();
+        return Response
+                .noContent()
+                .build();
     }
 }

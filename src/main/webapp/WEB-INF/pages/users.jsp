@@ -9,7 +9,7 @@
     </jsp:attribute>
 
     <jsp:attribute name="inner">
-        <h3>Users registered</h3>
+        <h1>Users registered</h1>
         <div class="wrapper">
 
             <!-- Content Wrapper. Contains page content -->

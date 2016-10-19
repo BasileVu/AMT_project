@@ -16,7 +16,7 @@
             <c:otherwise>
                 <form method="POST">
                     <div class="form-group">
-                        <textarea class="form-control" rows="5" name="quote" 
+                        <textarea class="form-control" rows="5" name="quote"
                                   maxlength="${FieldLength.QUOTE_MAX_LENGTH}">${requestScope.quote}</textarea>
                     </div>
 

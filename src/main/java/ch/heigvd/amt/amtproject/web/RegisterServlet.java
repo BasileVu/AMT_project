@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
@@ -21,11 +22,6 @@ public class RegisterServlet extends HttpServlet {
     UserDAOLocal userDAO;
 
     public static final String USED_JSP = "register.jsp";
-
-    public static final String FIELD_MISSING = "All fields must be filled.";
-    public static final String USER_ALREADY_EXISTS = "User already exists.";
-    public static final String PASSWORD_NOT_MATCHING = "Passwords don't match.";
-
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
@@ -42,7 +38,7 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             userDAO.create(username, password);
-        } catch (RuntimeException e) {
+        } catch (SQLException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
             return;
@@ -54,36 +50,49 @@ public class RegisterServlet extends HttpServlet {
     private boolean fieldsValid(HttpServletRequest request, HttpServletResponse response,
                                 String username, String password, String passwordConfirmation) throws ServletException, IOException {
 
+        if (username == null || username.isEmpty()) {
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
+                    Errors.USERNAME_MISSING, USED_JSP);
+            return false;
+        }
 
+        if (password == null || password.isEmpty()) {
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
+                    Errors.PASSWORD_MISSING, USED_JSP);
+            return false;
+        }
 
-        if (username.isEmpty() || password.isEmpty() || passwordConfirmation.isEmpty()) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED,
-                    FIELD_MISSING, USED_JSP);
+        if (passwordConfirmation == null || passwordConfirmation.isEmpty()) {
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
+                    Errors.PASSWORD_CONFIRMATION_MISSING, USED_JSP);
             return false;
         }
 
         if (!password.equals(passwordConfirmation)) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, PASSWORD_NOT_MATCHING, USED_JSP);
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
+                    Errors.PASSWORD_NOT_MATCHING, USED_JSP);
             return false;
         }
 
         if (username.length() > FieldLength.USERNAME_MAX_LENGTH) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST, Errors.USERNAME_TOO_LONG, USED_JSP);
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
+                    Errors.USERNAME_TOO_LONG, USED_JSP);
             return false;
         }
 
         if (password.length() > FieldLength.USERNAME_MAX_LENGTH) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST, Errors.PASSWORD_TOO_LONG, USED_JSP);
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
+                    Errors.PASSWORD_TOO_LONG, USED_JSP);
             return false;
         }
 
         try {
             if (userDAO.get(username) != null) {
                 Errors.setErrorAndForward(request, response, HttpServletResponse.SC_CONFLICT,
-                        USER_ALREADY_EXISTS, USED_JSP);
+                        Errors.USER_ALREADY_EXISTS, USED_JSP);
                 return false;
             }
-        } catch (RuntimeException e) {
+        } catch (SQLException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
             return false;

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
@@ -22,8 +23,6 @@ public class LoginServlet extends HttpServlet {
     UserDAOLocal userDAO;
 
     public static final String USED_JSP = "login.jsp";
-    public static final String LOGIN_ERROR = "Invalid username/password combination.";
-
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
@@ -38,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 
         try {
             u = userDAO.get(username);
-        } catch (RuntimeException e) {
+        } catch (SQLException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
             return;
@@ -46,7 +45,7 @@ public class LoginServlet extends HttpServlet {
         error = error || u == null;
 
         if (error || !Authentication.passwordValid(password, u)) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, LOGIN_ERROR, USED_JSP);
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_UNAUTHORIZED, Errors.LOGIN_FAILED, USED_JSP);
             return;
         }
 
