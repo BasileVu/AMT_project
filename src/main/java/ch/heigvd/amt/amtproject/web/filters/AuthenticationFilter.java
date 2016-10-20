@@ -1,6 +1,7 @@
-package ch.heigvd.amt.amtproject.web;
+package ch.heigvd.amt.amtproject.web.filters;
 
 import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.util.URIs;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
@@ -13,7 +14,7 @@ import java.io.IOException;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-@WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
+@WebFilter(filterName = "AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
     @Override
@@ -23,19 +24,18 @@ public class AuthenticationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        req.setCharacterEncoding("UTF-8");
         HttpServletRequest request = (HttpServletRequest)req;
         HttpServletResponse response = (HttpServletResponse)resp;
-        String path = request.getRequestURI().substring(request.getContextPath().length());
+        String uri = request.getRequestURI().substring(request.getContextPath().length());
 
         boolean connected = Session.isCurrentUserConnected(request);
 
-        if (connected && (path.equals("/login") || path.equals("/register"))) {
-            response.sendRedirect(request.getContextPath() + "/account");
+        if (connected && (uri.equals(URIs.LOGIN) || uri.equals(URIs.REGISTER))) {
+            response.sendRedirect(request.getContextPath() + URIs.ACCOUNT);
         }
 
-        else if (!connected && (path.equals("/account") || path.equals("/users"))) {
-            response.sendRedirect(request.getContextPath() + "/login");
+        else if (!connected && (uri.equals(URIs.ACCOUNT) || uri.equals(URIs.USERS))) {
+            response.sendRedirect(request.getContextPath() + URIs.LOGIN);
         }
 
         else {

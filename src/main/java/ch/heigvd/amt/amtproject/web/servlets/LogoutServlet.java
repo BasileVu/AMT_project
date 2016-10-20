@@ -1,6 +1,7 @@
-package ch.heigvd.amt.amtproject.web;
+package ch.heigvd.amt.amtproject.web.servlets;
 
 import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.util.URIs;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,7 @@ import java.io.IOException;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
+@WebServlet(name = "LogoutServlet", urlPatterns = {URIs.LOGOUT})
 public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

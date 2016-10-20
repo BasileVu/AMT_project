@@ -1,9 +1,10 @@
-package ch.heigvd.amt.amtproject.web;
+package ch.heigvd.amt.amtproject.web.servlets;
 
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.util.URIs;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -21,7 +22,7 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
+@WebServlet(name = "RegisterServlet", urlPatterns = {URIs.REGISTER})
 public class RegisterServlet extends HttpServlet {
     @EJB
     UserDAOLocal userDAO;
@@ -51,7 +52,7 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
         Session.connectCurrentUser(request, username);
-        response.sendRedirect(request.getContextPath() + "/account");
+        response.sendRedirect(request.getContextPath() + URIs.ACCOUNT);
     }
 
     /**

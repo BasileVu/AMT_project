@@ -9,9 +9,22 @@
         <error-code>404</error-code>
         <location>/WEB-INF/pages/errors/404.jsp</location>
     </error-page>
-
     <error-page>
         <error-code>500</error-code>
         <location>/WEB-INF/pages/errors/500.jsp</location>
     </error-page>
+
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CachingFilter</filter-name>
+        <url-pattern>/account</url-pattern>
+        <url-pattern>/users</url-pattern>
+    </filter-mapping>
 </web-app>

@@ -26,11 +26,22 @@ public class Errors {
 
     public static final String LOGIN_FAILED = "Invalid username/password combination.";
 
-
+    /**
+     * Set the error attribute to the given value, forward the request to the given JSP and set the response status
+     * code to the given value.
+     *
+     * @param request The current http request.
+     * @param response The current http response.
+     * @param status The status code to set for the response.
+     * @param error The value of the error to display in the JSP.
+     * @param dispatcherFilename The name of the JSP where the request is forwarded.
+     * @throws ServletException
+     * @throws IOException
+     */
     public static void setErrorAndForward(HttpServletRequest request, HttpServletResponse response,
                                           int status, String error, String dispatcherFilename) throws ServletException, IOException {
         response.setStatus(status);
-        request.setAttribute(Keys.JSP_ERROR, error);
+        request.setAttribute(JSPKeys.JSP_ERROR, error);
         request.getRequestDispatcher(Paths.JSP_FOLDER + dispatcherFilename).forward(request, response);
     }
 }

@@ -1,6 +1,7 @@
-package ch.heigvd.amt.amtproject.web;
+package ch.heigvd.amt.amtproject.web.servlets;
 
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
+import ch.heigvd.amt.amtproject.util.URIs;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -17,7 +18,7 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-@WebServlet(name = "UsersServlet", urlPatterns = {"/users"})
+@WebServlet(name = "UsersServlet", urlPatterns = {URIs.USERS})
 public class UsersServlet extends HttpServlet {
     @EJB
     UserDAOLocal userDAO;

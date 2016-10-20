@@ -1,10 +1,11 @@
-package ch.heigvd.amt.amtproject.web;
+package ch.heigvd.amt.amtproject.web.servlets;
 
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Authentication;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.util.URIs;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -22,7 +23,7 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = {URIs.LOGIN})
 public class LoginServlet extends HttpServlet {
     @EJB
     UserDAOLocal userDAO;
@@ -57,6 +58,6 @@ public class LoginServlet extends HttpServlet {
         }
 
         Session.connectCurrentUser(request, u.getUsername());
-        response.sendRedirect(request.getContextPath() + "/account");
+        response.sendRedirect(request.getContextPath() + URIs.ACCOUNT);
     }
 }

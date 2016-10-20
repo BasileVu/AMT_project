@@ -1,11 +1,8 @@
-package ch.heigvd.amt.amtproject.web;
+package ch.heigvd.amt.amtproject.web.servlets;
 
 import ch.heigvd.amt.amtproject.model.User;
-import ch.heigvd.amt.amtproject.util.Keys;
-import ch.heigvd.amt.amtproject.util.Session;
+import ch.heigvd.amt.amtproject.util.*;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
-import ch.heigvd.amt.amtproject.util.Errors;
-import ch.heigvd.amt.amtproject.util.FieldLength;
 
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -23,7 +20,7 @@ import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-@WebServlet(name = "AccountServlet", urlPatterns = {"/account"})
+@WebServlet(name = "AccountServlet", urlPatterns = {URIs.ACCOUNT})
 public class AccountServlet extends HttpServlet {
     @EJB
     UserDAOLocal userDAO;
@@ -41,13 +38,13 @@ public class AccountServlet extends HttpServlet {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
         }
-        request.setAttribute(Keys.QUOTE, quote);
+        request.setAttribute(JSPKeys.QUOTE, quote);
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String quote = request.getParameter(Keys.QUOTE);
+        String quote = request.getParameter(JSPKeys.QUOTE);
 
         if (quote == null) {
             quote = "";
@@ -68,8 +65,8 @@ public class AccountServlet extends HttpServlet {
             return;
         }
 
-        request.setAttribute(Keys.QUOTE, quote);
-        request.setAttribute(Keys.INFO, ACCOUNT_UPDATED_INFO);
+        request.setAttribute(JSPKeys.QUOTE, quote);
+        request.setAttribute(JSPKeys.INFO, ACCOUNT_UPDATED_INFO);
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 }

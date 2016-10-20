@@ -5,7 +5,7 @@ package ch.heigvd.amt.amtproject.util;
  *
  * @author Benjamin Schubert and Basile Vu
  */
-public interface Keys {
+public interface JSPKeys {
     String JSP_ERROR = "error";
     String INFO = "info";
 
