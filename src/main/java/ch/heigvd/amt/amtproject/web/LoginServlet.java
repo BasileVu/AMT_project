@@ -17,6 +17,11 @@ import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
+/**
+ * Servlet handling the requests related to the login page.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
     @EJB
@@ -24,10 +29,12 @@ public class LoginServlet extends HttpServlet {
 
     public static final String USED_JSP = "login.jsp";
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");

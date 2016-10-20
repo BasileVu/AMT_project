@@ -5,6 +5,11 @@ import javax.ws.rs.core.Application;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Defines a REST API under the "/api" prefix.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 @ApplicationPath("/api")
 public class ApiApplication extends Application {
     @Override

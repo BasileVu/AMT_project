@@ -5,6 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Regroups errors used in the application.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 public class Errors {
     public static final String CLIENT_500 = "An error occurred at server side. Please retry later.";
 

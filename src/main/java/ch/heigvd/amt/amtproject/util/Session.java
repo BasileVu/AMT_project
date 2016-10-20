@@ -2,6 +2,11 @@ package ch.heigvd.amt.amtproject.util;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Regroups static methods used to manage a user session.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 public class Session {
     public static final String USERNAME_KEY = "username";
 

@@ -8,13 +8,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Filter related to authentication. Allow protected pages access based on whether the user is connected.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 @WebFilter(filterName = "AuthenticationFilter", urlPatterns = {"/*"})
 public class AuthenticationFilter implements Filter {
 
+    @Override
     public void init(FilterConfig config) throws ServletException {
 
     }
 
+    @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         HttpServletRequest request = (HttpServletRequest)req;
@@ -36,6 +43,7 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
+    @Override
     public void destroy() {
 
     }

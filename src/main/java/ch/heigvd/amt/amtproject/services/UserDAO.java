@@ -16,12 +16,13 @@ public class UserDAO implements UserDAOLocal {
     DataSource source;
 
     @Override
-    public void create(String username, String password) throws SQLException {
+    public void create(String username, String password, String quote) throws SQLException {
         String query =
                 "INSERT INTO user (" +
                     "username, " +
-                    "password" +
-                ") VALUES (?, ?)";
+                    "password, " +
+                    "quote" +
+                ") VALUES (?, ?, ?)";
 
         try (
                 Connection connection = source.getConnection();
@@ -29,6 +30,7 @@ public class UserDAO implements UserDAOLocal {
         ) {
             stmt.setString(1, username);
             stmt.setString(2, password);
+            stmt.setString(3, quote);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

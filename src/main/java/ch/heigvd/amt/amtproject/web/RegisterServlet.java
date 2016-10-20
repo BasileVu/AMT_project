@@ -16,6 +16,11 @@ import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
+/**
+ * Servlet handling the requests related to the register page.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/register"})
 public class RegisterServlet extends HttpServlet {
     @EJB
@@ -23,21 +28,23 @@ public class RegisterServlet extends HttpServlet {
 
     public static final String USED_JSP = "register.jsp";
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String passwordConfirmation = request.getParameter("password-confirmation");
 
-        if (!fieldsValid(request, response, username, password, passwordConfirmation)) {
+        if (!parametersValid(request, response, username, password, passwordConfirmation)) {
             return;
         }
 
         try {
-            userDAO.create(username, password);
+            userDAO.create(username, password, "");
         } catch (SQLException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.CLIENT_500, USED_JSP);
@@ -47,8 +54,21 @@ public class RegisterServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/account");
     }
 
-    private boolean fieldsValid(HttpServletRequest request, HttpServletResponse response,
-                                String username, String password, String passwordConfirmation) throws ServletException, IOException {
+    /**
+     * Checks whether the parameters sent with the register request are valid. If one of the parameters is not
+     * valid, an error is set, the request is forwarded to used JSP and the method returns false.
+     *
+     * @param request The current http request.
+     * @param response The current http response.
+     * @param username The username sent.
+     * @param password The password sent.
+     * @param passwordConfirmation The password confirmation sent.
+     * @return Whether all the parameters are valid.
+     * @throws ServletException
+     * @throws IOException
+     */
+    private boolean parametersValid(HttpServletRequest request, HttpServletResponse response,
+                                    String username, String password, String passwordConfirmation) throws ServletException, IOException {
 
         if (username == null || username.isEmpty()) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,

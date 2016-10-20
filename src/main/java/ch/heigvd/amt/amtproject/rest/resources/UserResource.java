@@ -1,13 +1,13 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
 import ch.heigvd.amt.amtproject.model.User;
+import ch.heigvd.amt.amtproject.rest.dto.IdUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.UserDTO;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
 import ch.heigvd.amt.amtproject.util.PATCH;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -21,6 +21,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Defines the REST API for the /users uri.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 @Stateless
 @Path("/users")
 public class UserResource {
@@ -30,6 +35,12 @@ public class UserResource {
     @Context
     UriInfo uriInfo;
 
+    /**
+     * Get the info of a user, using his username.
+     *
+     * @param username The user's username.
+     * @return A response containing the user and a "success" status if user exists, otherwise a "not found" status.
+     */
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,10 +59,15 @@ public class UserResource {
                     .build();
         }
         return Response
-                .ok(new UserDTO(u.getId(), u.getUsername(), u.getQuote()))
+                .ok(new IdUserDTO(u.getId(), u.getUsername(), u.getQuote()))
                 .build();
     }
 
+    /**
+     * Get the info of every user registered.
+     *
+     * @return A response containing a "success" status and the users.
+     */
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
@@ -60,7 +76,7 @@ public class UserResource {
         try {
             userDAO.getAll()
                     .forEach(u -> res.add(
-                            new UserDTO(u.getId(), u.getUsername(), u.getQuote()))
+                            new IdUserDTO(u.getId(), u.getUsername(), u.getQuote()))
                     );
         } catch (SQLException e) {
             return Response
@@ -72,12 +88,27 @@ public class UserResource {
                 .build();
     }
 
+    /**
+     * Create a new user with the fields passed in the json.
+     *
+     * At least these values must be passed in the json:
+     * - "username" : the user's username,
+     * - "password" : the user's password.
+     *
+     * The user's quote can optionally be specified with the "quote" key.
+     *
+     * @param user The user info that will be stored in the PasswordUserDTO.
+     * @return A response containing the uri of the user and a "created" status if successful,
+     *         a "conflict" status if the user already exists or
+     *         an error and a "bad request" status if one of the field is incorrect.
+     */
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(PasswordUserDTO user) {
         String username = user.getUsername();
         String password = user.getPassword();
+        String quote = user.getQuote();
 
         if (username == null || username.isEmpty()) {
             return Response
@@ -107,13 +138,20 @@ public class UserResource {
                     .build();
         }
 
+        if (quote != null && quote.length() > FieldLength.QUOTE_MAX_LENGTH) {
+            return Response
+                    .status(Response.Status.BAD_REQUEST)
+                    .entity(Errors.QUOTE_TOO_LONG)
+                    .build();
+        }
+
         try {
             if (userDAO.get(username) != null) {
                 return Response
                         .status(Response.Status.CONFLICT)
                         .build();
             }
-            userDAO.create(username, password);
+            userDAO.create(username, password, (quote != null) ? quote : "");
         } catch (SQLException e) {
             return Response
                     .serverError()
@@ -129,6 +167,23 @@ public class UserResource {
         return Response.created(href).build();
     }
 
+    /**
+     * Partially updates the info of an user, given his username.
+     *
+     * The values passed in the json should correspond to the fields in the PasswordUserDTO, namely:
+     * - "username" : the user's username,
+     * - "password" : the user's password,
+     * - "quote" : the user's quote.
+     *
+     * Only the values specified will be updated.
+     *
+     * @param username The user's username.
+     * @param user The values that will be put in a PasswordUserDTO.
+     * @return A response containing
+     *         a "no content" status if successful,
+     *         an error with a "bad request" status if parameters are incorrect or
+     *         a "not found" status if user doesn't exist.
+     */
     @PATCH
     @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -174,10 +229,21 @@ public class UserResource {
                 .build();
     }
 
+    /**
+     * Deletes an user based on the given username.
+     *
+     * @param username The username of the user to delete.
+     * @return A response containing a "no content" status or a "not found" status if user doesn't exist.
+     */
     @DELETE
     @Path("/{username}")
     public Response delete(@PathParam(value="username") String username) {
         try {
+            if (userDAO.get(username) == null) {
+                return Response
+                        .status(Response.Status.NOT_FOUND)
+                        .build();
+            }
             userDAO.delete(username);
         } catch (SQLException e) {
             return Response

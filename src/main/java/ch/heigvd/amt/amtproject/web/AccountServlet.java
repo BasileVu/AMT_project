@@ -18,6 +18,11 @@ import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
+/**
+ * Servlet handling the requests related to user's account main page.
+ *
+ * @author Benjamin Schubert and Basile Vu
+ */
 @WebServlet(name = "AccountServlet", urlPatterns = {"/account"})
 public class AccountServlet extends HttpServlet {
     @EJB
@@ -27,6 +32,7 @@ public class AccountServlet extends HttpServlet {
     public static final String QUOTE_TOO_LONG_ERROR = "Your quote is too long (max " + FieldLength.QUOTE_MAX_LENGTH + " chars)";
     public static final String ACCOUNT_UPDATED_INFO = "Your account has been successfully updated.";
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quote = "";
         try {
@@ -39,6 +45,7 @@ public class AccountServlet extends HttpServlet {
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String quote = request.getParameter(Keys.QUOTE);
 
