@@ -1,5 +1,6 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
+import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.IdUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
@@ -17,7 +18,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,22 +40,17 @@ public class UserResource {
      *
      * @param username The user's username.
      * @return A response containing the user and a "success" status if user exists, otherwise a "not found" status.
+     * @throws SQLExceptionWrapper if there is an error related to the db accessed by the UserDAO.
      */
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam(value="username") String username) {
+    public Response getUser(@PathParam(value="username") String username) throws SQLExceptionWrapper {
         User u;
-        try {
-            u = userDAO.get(username);
-            if (u == null) {
-                return Response
-                        .status(Response.Status.NOT_FOUND)
-                        .build();
-            }
-        } catch (SQLException e) {
+        u = userDAO.get(username);
+        if (u == null) {
             return Response
-                    .serverError()
+                    .status(Response.Status.NOT_FOUND)
                     .build();
         }
         return Response
@@ -67,22 +62,17 @@ public class UserResource {
      * Get the info of every user registered.
      *
      * @return A response containing a "success" status and the users.
+     * @throws SQLExceptionWrapper if there is an error related to the db accessed by the UserDAO.
      */
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsers() {
+    public Response getUsers() throws SQLExceptionWrapper {
         List<UserDTO> res = new ArrayList<>();
-        try {
-            userDAO.getAll()
-                    .forEach(u -> res.add(
-                            new IdUserDTO(u.getId(), u.getUsername(), u.getQuote()))
-                    );
-        } catch (SQLException e) {
-            return Response
-                    .serverError()
-                    .build();
-        }
+        userDAO.getAll()
+                .forEach(u -> res.add(
+                        new IdUserDTO(u.getId(), u.getUsername(), u.getQuote()))
+                );
         return Response
                 .ok(res)
                 .build();
@@ -101,11 +91,12 @@ public class UserResource {
      * @return A response containing the uri of the user and a "created" status if successful,
      *         a "conflict" status if the user already exists or
      *         an error and a "bad request" status if one of the field is incorrect.
+     * @throws SQLExceptionWrapper if there is an error related to the db accessed by the UserDAO.
      */
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(PasswordUserDTO user) {
+    public Response create(PasswordUserDTO user) throws SQLExceptionWrapper {
         String username = user.getUsername();
         String password = user.getPassword();
         String quote = user.getQuote();
@@ -145,19 +136,12 @@ public class UserResource {
                     .build();
         }
 
-        try {
-            if (userDAO.get(username) != null) {
-                return Response
-                        .status(Response.Status.CONFLICT)
-                        .build();
-            }
-            userDAO.create(username, password, (quote != null) ? quote : "");
-        } catch (SQLException e) {
+        if (userDAO.get(username) != null) {
             return Response
-                    .serverError()
+                    .status(Response.Status.CONFLICT)
                     .build();
         }
-
+        userDAO.create(username, password, (quote != null) ? quote : "");
         URI href = uriInfo
                 .getBaseUriBuilder()
                 .path(UserResource.class)
@@ -183,47 +167,43 @@ public class UserResource {
      *         a "no content" status if successful,
      *         an error with a "bad request" status if parameters are incorrect or
      *         a "not found" status if user doesn't exist.
+     * @throws SQLExceptionWrapper if there is an error related to the db accessed by the UserDAO.
      */
     @PATCH
     @Path("/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("username") String username, PasswordUserDTO user) {
-        try {
-            User u = userDAO.get(username);
-            if (u == null) {
+    public Response update(@PathParam("username") String username, PasswordUserDTO user) throws SQLExceptionWrapper {
+        User u = userDAO.get(username);
+        if (u == null) {
+            return Response
+                    .status(Response.Status.NOT_FOUND)
+                    .build();
+        }
+
+        if (user.getPassword() != null) {
+            if (user.getPassword().length() > FieldLength.PASSWORD_MAX_LENGTH) {
                 return Response
-                        .status(Response.Status.NOT_FOUND)
+                        .status(Response.Status.BAD_REQUEST)
+                        .entity(Errors.PASSWORD_TOO_LONG)
                         .build();
             }
 
-            if (user.getPassword() != null) {
-                if (user.getPassword().length() > FieldLength.PASSWORD_MAX_LENGTH) {
-                    return Response
-                            .status(Response.Status.BAD_REQUEST)
-                            .entity(Errors.PASSWORD_TOO_LONG)
-                            .build();
-                }
-
-                u.setPassword(user.getPassword());
-            }
-
-            if (user.getQuote() != null) {
-                if (user.getQuote().length() > FieldLength.QUOTE_MAX_LENGTH) {
-                    return Response
-                            .status(Response.Status.BAD_REQUEST)
-                            .entity(Errors.QUOTE_TOO_LONG)
-                            .build();
-                }
-
-                u.setQuote(user.getQuote());
-            }
-
-            userDAO.update(u);
-        } catch (SQLException e) {
-            return Response
-                    .serverError()
-                    .build();
+            u.setPassword(user.getPassword());
         }
+
+        if (user.getQuote() != null) {
+            if (user.getQuote().length() > FieldLength.QUOTE_MAX_LENGTH) {
+                return Response
+                        .status(Response.Status.BAD_REQUEST)
+                        .entity(Errors.QUOTE_TOO_LONG)
+                        .build();
+            }
+
+            u.setQuote(user.getQuote());
+        }
+
+        userDAO.update(u);
+
         return Response
                 .noContent()
                 .build();
@@ -234,22 +214,17 @@ public class UserResource {
      *
      * @param username The username of the user to delete.
      * @return A response containing a "no content" status or a "not found" status if user doesn't exist.
+     * @throws SQLExceptionWrapper if there is an error related to the db accessed by the UserDAO.
      */
     @DELETE
     @Path("/{username}")
-    public Response delete(@PathParam(value="username") String username) {
-        try {
-            if (userDAO.get(username) == null) {
-                return Response
-                        .status(Response.Status.NOT_FOUND)
-                        .build();
-            }
-            userDAO.delete(username);
-        } catch (SQLException e) {
+    public Response delete(@PathParam(value="username") String username) throws SQLExceptionWrapper {
+        if (userDAO.get(username) == null) {
             return Response
-                    .serverError()
+                    .status(Response.Status.NOT_FOUND)
                     .build();
         }
+        userDAO.delete(username);
         return Response
                 .noContent()
                 .build();

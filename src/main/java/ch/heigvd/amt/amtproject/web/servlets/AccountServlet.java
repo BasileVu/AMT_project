@@ -1,5 +1,6 @@
 package ch.heigvd.amt.amtproject.web.servlets;
 
+import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.util.*;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
@@ -11,7 +12,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
@@ -34,9 +34,9 @@ public class AccountServlet extends HttpServlet {
         String quote = "";
         try {
             quote = userDAO.get(Session.getCurrentUsername(request)).getQuote();
-        } catch (SQLException e) {
+        } catch (SQLExceptionWrapper e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    Errors.CLIENT_500, USED_JSP);
+                    Errors.SERVER_ERROR, USED_JSP);
         }
         request.setAttribute(JSPKeys.QUOTE, quote);
         request.getRequestDispatcher(JSP_FOLDER + USED_JSP).forward(request, response);
@@ -60,8 +60,8 @@ public class AccountServlet extends HttpServlet {
             u = userDAO.get(Session.getCurrentUsername(request));
             u.setQuote(quote);
             userDAO.update(u);
-        } catch (SQLException e) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Errors.CLIENT_500, USED_JSP);
+        } catch (SQLExceptionWrapper e) {
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Errors.SERVER_ERROR, USED_JSP);
             return;
         }
 

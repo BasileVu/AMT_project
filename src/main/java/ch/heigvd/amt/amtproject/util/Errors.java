@@ -6,12 +6,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Regroups errors used in the application.
+ * Regroups errors shown to the user.
  *
  * @author Benjamin Schubert and Basile Vu
  */
 public class Errors {
-    public static final String CLIENT_500 = "An error occurred at server side. Please retry later.";
+    public static final String SERVER_ERROR = "An error occurred at server side. Please retry later.";
 
     public static final String USERNAME_TOO_LONG = "Username is too long (max " + FieldLength.USERNAME_MAX_LENGTH + " chars).";
     public static final String PASSWORD_TOO_LONG = "Password is too long (max " + FieldLength.PASSWORD_MAX_LENGTH + " chars).";

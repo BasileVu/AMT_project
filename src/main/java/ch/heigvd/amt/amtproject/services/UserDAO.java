@@ -1,5 +1,6 @@
 package ch.heigvd.amt.amtproject.services;
 
+import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
 import ch.heigvd.amt.amtproject.model.User;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ public class UserDAO implements UserDAOLocal {
     DataSource source;
 
     @Override
-    public void create(String username, String password, String quote) throws SQLException {
+    public void create(String username, String password, String quote) throws SQLExceptionWrapper {
         String query =
                 "INSERT INTO user (" +
                     "username, " +
@@ -33,12 +34,12 @@ public class UserDAO implements UserDAOLocal {
             stmt.setString(3, quote);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLExceptionWrapper(e);
         }
     }
 
     @Override
-    public User get(String username) throws SQLException {
+    public User get(String username) throws SQLExceptionWrapper {
         String query =
                 "SELECT * " +
                 "FROM user " +
@@ -59,14 +60,14 @@ public class UserDAO implements UserDAOLocal {
                 }
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLExceptionWrapper(e);
         }
 
         return res;
     }
 
     @Override
-    public List<User> getAll() throws SQLException {
+    public List<User> getAll() throws SQLExceptionWrapper {
         String query =
                 "SELECT * " +
                 "FROM user";
@@ -85,14 +86,14 @@ public class UserDAO implements UserDAOLocal {
                 res.add(new User(id, username, password, quote));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLExceptionWrapper(e);
         }
 
         return res;
     }
 
     @Override
-    public void update(User u) throws SQLException {
+    public void update(User u) throws SQLExceptionWrapper {
         String query =
                 "UPDATE user " +
                 "SET password = ?, quote = ? " +
@@ -107,12 +108,12 @@ public class UserDAO implements UserDAOLocal {
             stmt.setString(3, u.getUsername());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLExceptionWrapper(e);
         }
     }
 
     @Override
-    public void delete(String username) throws SQLException {
+    public void delete(String username) throws SQLExceptionWrapper {
         String query =
                 "DELETE FROM user " +
                 "WHERE username = ?";
@@ -124,7 +125,7 @@ public class UserDAO implements UserDAOLocal {
             stmt.setString(1, username);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new SQLExceptionWrapper(e);
         }
     }
 }

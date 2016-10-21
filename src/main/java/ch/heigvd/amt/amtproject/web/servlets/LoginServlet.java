@@ -1,5 +1,6 @@
 package ch.heigvd.amt.amtproject.web.servlets;
 
+import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Authentication;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
@@ -45,9 +45,9 @@ public class LoginServlet extends HttpServlet {
 
         try {
             u = userDAO.get(username);
-        } catch (SQLException e) {
+        } catch (SQLExceptionWrapper e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    Errors.CLIENT_500, USED_JSP);
+                    Errors.SERVER_ERROR, USED_JSP);
             return;
         }
         error = error || u == null;

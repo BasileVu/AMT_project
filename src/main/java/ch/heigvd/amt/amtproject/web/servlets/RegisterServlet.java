@@ -1,5 +1,6 @@
 package ch.heigvd.amt.amtproject.web.servlets;
 
+import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 import static ch.heigvd.amt.amtproject.util.Paths.JSP_FOLDER;
 
@@ -46,9 +46,9 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             userDAO.create(username, password, "");
-        } catch (SQLException e) {
+        } catch (SQLExceptionWrapper e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    Errors.CLIENT_500, USED_JSP);
+                    Errors.SERVER_ERROR, USED_JSP);
             return;
         }
         Session.connectCurrentUser(request, username);
@@ -113,9 +113,9 @@ public class RegisterServlet extends HttpServlet {
                         Errors.USER_ALREADY_EXISTS, USED_JSP);
                 return false;
             }
-        } catch (SQLException e) {
+        } catch (SQLExceptionWrapper e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    Errors.CLIENT_500, USED_JSP);
+                    Errors.SERVER_ERROR, USED_JSP);
             return false;
         }
 
