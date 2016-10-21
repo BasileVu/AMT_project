@@ -9,5 +9,5 @@ INSERT INTO user(
 ) VALUES(
     "admin",
     "admin",
-    "\"Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.\"\n― Albert Einstein"
+    "\"Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.\"\n- Albert Einstein"
 );
