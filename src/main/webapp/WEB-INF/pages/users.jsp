@@ -4,8 +4,7 @@
 
 <t:container>
     <jsp:attribute name="head">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/bootstrap.min.css">
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/dataTables.bootstrap.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
     </jsp:attribute>
 
     <jsp:attribute name="inner">
@@ -37,20 +36,23 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.col -->
                     </div>
-                    <!-- /.row -->
                 </section>
-                <!-- /.content -->
             </div>
         </div>
     </jsp:attribute>
 
     <jsp:attribute name="scripts">
-        <script src="${pageContext.request.contextPath}/static/js/jquery-2.2.3.min.js"></script>
-        <script src="${pageContext.request.contextPath}/static/js/bootstrap.min.js"></script>
-        <script src="${pageContext.request.contextPath}/static/js/jquery.dataTables.min.js"></script>
-        <script src="${pageContext.request.contextPath}/static/js/dataTables.bootstrap.min.js"></script>
+        <script
+                src="https://code.jquery.com/jquery-2.2.3.min.js"
+                integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="
+                crossorigin="anonymous"></script>
+        <script
+                src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+                crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
         <script>
             $(function () {
                 $('#users').DataTable({
