@@ -6,6 +6,13 @@ The purpose is to learn how multi-tier applications work and how to build them u
 In this project, a user is able to create an account, login and see various informations about his account. A REST API can be used in order to do interact easily and quickly with the various informations stored in the database.
 
 ## Deploying the app
+
+### Requirements
+- Docker-compose
+- Maven
+
+### Deployment
+
 Download/clone the repo, `cd` into it and just type `./deploy.sh`.
 
 The app should be running at `localhost:9090/AMT_project/`.
@@ -26,4 +33,4 @@ Still at the root of the directory, enter the following commands:
 
 ## REST API
 
-Our API is defined on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
+Our API and the postman scripts can be found on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
