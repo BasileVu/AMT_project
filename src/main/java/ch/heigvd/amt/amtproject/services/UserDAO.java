@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.services;
 
 import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
+import ch.heigvd.amt.amtproject.exception.UserAlreadyExistingException;
 import ch.heigvd.amt.amtproject.model.User;
 
 import javax.annotation.Resource;
@@ -17,7 +18,7 @@ public class UserDAO implements UserDAOLocal {
     DataSource source;
 
     @Override
-    public void create(String username, String password, String quote) throws SQLExceptionWrapper {
+    public void create(String username, String password, String quote) throws UserAlreadyExistingException, SQLExceptionWrapper {
         String query =
                 "INSERT INTO user (" +
                     "username, " +
@@ -34,6 +35,9 @@ public class UserDAO implements UserDAOLocal {
             stmt.setString(3, quote);
             stmt.executeUpdate();
         } catch (SQLException e) {
+            if (e.getClass().getSimpleName().equals("MySQLIntegrityConstraintViolationException")) {
+                throw new UserAlreadyExistingException();
+            }
             throw new SQLExceptionWrapper(e);
         }
     }
