@@ -1,0 +1,335 @@
+{
+	"variables": [],
+	"info": {
+		"name": "AMT_project",
+		"_postman_id": "989964d4-0572-1d93-c6a6-cba134d5b3f4",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "DELETE",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/users/a",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": "Delete a user"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/users",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"a\",\n\t\"password\": \"a\"\n}"
+						},
+						"description": "Get all users"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/a",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"a\",\n\t\"password\": \"a\"\n}"
+						},
+						"description": "Get user info"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PATCH",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/users/a all only password update",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"d\"\n}"
+						},
+						"description": "Update user info"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/a all only quote update",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"quote\": \"Testing is a test.\"\n}"
+						},
+						"description": "Update user info"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/a all update",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"c\",\n\t\"quote\": \"Test\"\n}"
+						},
+						"description": "Update user info"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/a password too long",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\n\t\"quote\": \"Test\"\n}"
+						},
+						"description": "Update user info"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/a quote too long",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/a",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"c\",\n\t\"quote\": \"TestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTestTest\"\n}"
+						},
+						"description": "Update user info"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "POST",
+			"description": "",
+			"item": [
+				{
+					"name": "/api/users/",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"a\",\n\t\"password\": \"a\"\n}"
+						},
+						"description": "Create new user"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/ with quote",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"a\",\n\t\"password\": \"a\",\n\t\"quote\": \"I'm new here.\"\n}"
+						},
+						"description": "Create new user with quote specified"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/ username too long",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\n\t\"password\": \"a\"\n}"
+						},
+						"description": "Create new user, username too long"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/ password too long",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"a\",\n\t\"password\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"\n}"
+						},
+						"description": "Create new user, password too long"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/ username missing",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"password\": \"a\"\n}"
+						},
+						"description": "Try to create a new user with username missing"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/ password missing",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"a\"\n}"
+						},
+						"description": "Try to create a new user with password missing"
+					},
+					"response": []
+				},
+				{
+					"name": "/api/users/ invalid values",
+					"request": {
+						"url": "{{URL_PREFIX}}/api/users/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"userName\": \"a\",\n\t\"password\": \"a\"\n}"
+						},
+						"description": "Try to create a new user with invalid values in json"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
