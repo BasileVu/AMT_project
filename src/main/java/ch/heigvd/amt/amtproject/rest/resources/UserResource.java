@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.rest.resources;
 
 import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
+import ch.heigvd.amt.amtproject.exception.UserAlreadyExistingException;
 import ch.heigvd.amt.amtproject.model.User;
 import ch.heigvd.amt.amtproject.rest.dto.IdUserDTO;
 import ch.heigvd.amt.amtproject.rest.dto.PasswordUserDTO;
@@ -136,12 +137,14 @@ public class UserResource {
                     .build();
         }
 
-        if (userDAO.get(username) != null) {
+        try {
+            userDAO.create(username, password, (quote != null) ? quote : "");
+        } catch (UserAlreadyExistingException e) {
             return Response
                     .status(Response.Status.CONFLICT)
                     .build();
         }
-        userDAO.create(username, password, (quote != null) ? quote : "");
+        
         URI href = uriInfo
                 .getBaseUriBuilder()
                 .path(UserResource.class)

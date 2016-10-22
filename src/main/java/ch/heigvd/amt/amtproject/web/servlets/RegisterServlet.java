@@ -1,6 +1,7 @@
 package ch.heigvd.amt.amtproject.web.servlets;
 
 import ch.heigvd.amt.amtproject.exception.SQLExceptionWrapper;
+import ch.heigvd.amt.amtproject.exception.UserAlreadyExistingException;
 import ch.heigvd.amt.amtproject.services.UserDAOLocal;
 import ch.heigvd.amt.amtproject.util.Errors;
 import ch.heigvd.amt.amtproject.util.FieldLength;
@@ -46,6 +47,10 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             userDAO.create(username, password, "");
+        } catch (UserAlreadyExistingException e) {
+            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_CONFLICT,
+                    Errors.USER_ALREADY_EXISTS, USED_JSP);
+            return;
         } catch (SQLExceptionWrapper e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.SERVER_ERROR, USED_JSP);
@@ -104,18 +109,6 @@ public class RegisterServlet extends HttpServlet {
         if (password.length() > FieldLength.USERNAME_MAX_LENGTH) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_BAD_REQUEST,
                     Errors.PASSWORD_TOO_LONG, USED_JSP);
-            return false;
-        }
-
-        try {
-            if (userDAO.get(username) != null) {
-                Errors.setErrorAndForward(request, response, HttpServletResponse.SC_CONFLICT,
-                        Errors.USER_ALREADY_EXISTS, USED_JSP);
-                return false;
-            }
-        } catch (SQLExceptionWrapper e) {
-            Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                    Errors.SERVER_ERROR, USED_JSP);
             return false;
         }
 

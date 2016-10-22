@@ -3,7 +3,10 @@ package ch.heigvd.amt.amtproject.exception;
 import java.sql.SQLException;
 
 /**
- * Created by Flagoul on 21.10.2016.
+ * Exception wrapping an SQLException. Useful to bypass the EJBException nesting (SQLException are
+ * nested by default by EJBs).
+ *
+ * @author Benjamin Schubert and Basile Vu
  */
 public class SQLExceptionWrapper extends Exception {
     public SQLExceptionWrapper(SQLException e) {

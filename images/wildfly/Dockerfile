@@ -4,9 +4,9 @@ LABEL Wildfly Server
 
 MAINTAINER Basile Vu <basile.vu@gmail.com>
 
-COPY AMT_project.war /opt/jboss/wildfly/standalone/deployments
-COPY mysql-connector-java-5.1.40-bin.jar /opt/jboss/wildfly/standalone/deployments
-COPY data/standalone.xml /opt/jboss/wildfly/standalone/configuration/
+COPY standalone/deployments/AMT_project.war /opt/jboss/wildfly/standalone/deployments
+COPY standalone/deployments/mysql-connector-java-5.1.40-bin.jar /opt/jboss/wildfly/standalone/deployments
+COPY standalone/configuration/standalone.xml /opt/jboss/wildfly/standalone/configuration/
 
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
 
