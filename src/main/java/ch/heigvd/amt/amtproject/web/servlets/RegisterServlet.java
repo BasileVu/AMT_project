@@ -50,6 +50,7 @@ public class RegisterServlet extends HttpServlet {
         } catch (UserAlreadyExistingException e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_CONFLICT,
                     Errors.USER_ALREADY_EXISTS, USED_JSP);
+            return;
         } catch (SQLExceptionWrapper e) {
             Errors.setErrorAndForward(request, response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                     Errors.SERVER_ERROR, USED_JSP);
