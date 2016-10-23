@@ -36,5 +36,5 @@ Our API and its postman collection can be found on our [wiki page](https://githu
 You can also find the postman collection (exported as collection v2) in the `scripts` folder.
 
 ## JMeter script
-You can also find it in the `scripts` folder. With it, you cab test the functional behavior and measure performance of the server.
-The tests are based on the implemented REST API and include performance and concurrent operation testing. Before running them, make sure to setup the user variables by clicking on the `Test plan` icon.
+You can also find it in the `scripts` folder. With it, you can test the functional behavior and measure performance of the server.
+Please visit our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/JMeter-script) to see detailed running instructions.
