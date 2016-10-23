@@ -32,8 +32,11 @@ Still at the root of the directory, enter the following commands:
 2. `docker-compose up --build`
 
 ## REST API
-Our API and its postman collection can be found on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
+Our API is defined on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
 You can also find the postman collection (exported as collection v2) in the `scripts` folder.
+
+## Postman script
+If you want to test our API, you can import the postman collection by going on the [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/Postman-script) and clicking on the `run in postman` button. You can also directly import it from the `scripts` folder.
 
 ## JMeter script
 You can also find it in the `scripts` folder. With it, you can test the functional behavior and measure performance of the server.
