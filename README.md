@@ -3,7 +3,7 @@ This is a simple docker - java EE application for our AMT course at HEIG-VD.
 
 The purpose is to learn how multi-tier applications work and how to build them using Java EE and its various components (Servlets, JSPs, Beans, DAOs, DTOs,...) to produce a well-structured app.
 
-In this project, a user is able to create an account, login and see various informations about his account. A REST API can be used in order to do interact easily and quickly with the various informations stored in the database.
+In this project, a user is able to create an account, login and see various informations about his account. A REST API, intended for admin purpose, can be used in order to do CRUD operations on the users. To illustrate an example of utilisation of the API, an admin page displaying all the users registered can be accessed when logged in.
 
 ## Deploying the app
 
