@@ -1,7 +1,7 @@
 # AMT_project
 This is a simple docker - java EE application for our AMT course at HEIG-VD.
 
-The purpose is to learn how multi-tier applications work and how to build them using various components (Servlets, JSP, Beans, DAO, ...) to produce a well-structured app.
+The purpose is to learn how multi-tier applications work and how to build them using Java EE and its various components (Servlets, JSPs, Beans, DAOs, DTOs,...) to produce a well-structured app.
 
 In this project, a user is able to create an account, login and see various informations about his account. A REST API can be used in order to do interact easily and quickly with the various informations stored in the database.
 
@@ -32,5 +32,9 @@ Still at the root of the directory, enter the following commands:
 2. `docker-compose up --build`
 
 ## REST API
+Our API and its postman collection can be found on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
+You can also find the postman collection (exported as collection v2) in the `scripts` folder.
 
-Our API and the postman scripts can be found on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
+## JMeter script
+You can also find it in the `scripts` folder. With it, you cab test the functional behavior and measure performance of the server.
+The tests are based on the implemented REST API and include performance and concurrent operation testing. Before running them, make sure to setup the user variables by clicking on the `Test plan` icon.
