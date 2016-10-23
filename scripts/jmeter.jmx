@@ -40,6 +40,7 @@
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Simulates multiple users trying to fetch all the existing users repeatedly in a short interval of time.</stringProp>
       </ThreadGroup>
       <hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Get all users" enabled="true">
@@ -151,6 +152,7 @@
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Simulates reapeated concurrent user creation by multiple users. The first one should return a 201 and the others a 409.</stringProp>
       </ThreadGroup>
       <hashTree>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -265,15 +267,16 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Contrôleur Boucle" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">500</stringProp>
+          <stringProp name="LoopController.loops">5</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">4</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+        <stringProp name="ThreadGroup.ramp_time"></stringProp>
         <longProp name="ThreadGroup.start_time">1477166491000</longProp>
         <longProp name="ThreadGroup.end_time">1477166491000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Simulates reapeated concurrent user update by multiple users.</stringProp>
       </ThreadGroup>
       <hashTree>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
@@ -397,6 +400,7 @@
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
+        <stringProp name="TestPlan.comments">Simulates reapeated concurrent user deletion by multiple users.</stringProp>
       </ThreadGroup>
       <hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Delete user a" enabled="true">

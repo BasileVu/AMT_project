@@ -222,11 +222,6 @@ public class UserResource {
     @DELETE
     @Path("/{username}")
     public Response delete(@PathParam(value="username") String username) throws SQLExceptionWrapper {
-        if (userDAO.get(username) == null) {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .build();
-        }
         userDAO.delete(username);
         return Response
                 .noContent()
