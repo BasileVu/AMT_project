@@ -15,7 +15,7 @@ In this project, a user is able to create an account, login and see various info
 
 Download/clone the repo, `cd` into it and just type `./deploy.sh`.
 
-The app should be running at `localhost:9090/AMT_project/`.
+The app should be running at [localhost:9090/AMT_project/](http://localhost:9090/AMT_project/).
 
 ### Detailed commands
 
@@ -28,8 +28,10 @@ If for any reason you prefer to do it manually instead of running the script, yo
 #### Deploy the app
 Still at the root of the directory, enter the following commands:
 
-1. `cp target/AMT_project.war images/wildfly/`
+1. `cp target/AMT_project.war images/wildfly/standalone/deployments/`
 2. `docker-compose up --build`
+
+_Warning: you may need to stop your local mysql daemon if the port 3306 is already used._
 
 ## REST API
 Our API is defined on our [wiki page](https://github.com/BenjaminSchubert/AMT_project/wiki/REST-API).
